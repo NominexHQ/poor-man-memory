@@ -1,6 +1,6 @@
 ---
 name: pmm-settings
-description: "Change Poor Man's Memory configuration. Re-presents preference prompts for save cadence, commit behaviour, sliding window size, verbosity, and active files. Use when the user runs /pmm-settings or asks to change memory system settings."
+description: "Change Poor Man's Memory configuration. Re-presents preference prompts for save cadence, commit behaviour, sliding window size, verbosity, maintain agent model, and active files. Use when the user runs /pmm-settings or asks to change memory system settings."
 ---
 
 # PMM Settings
@@ -22,12 +22,13 @@ Read `memory/config.md` and display the current settings to the user as a summar
 > - Commit behaviour: [current]
 > - Window size: [current preset or custom]
 > - Verbosity: [current]
+> - Maintain agent model: [current]
 > - Active files: [count] of 14 active
 > - Deactivated: [list, or "none"]
 
 ### Step 2 — Present preference prompts
 
-Use `AskUserQuestion` to present the same 5 questions from Phase 1 of the main skill, pre-filled with current values. The user can change any or all options.
+Use `AskUserQuestion` to present the same 6 questions from Phase 1 of the main skill, pre-filled with current values. The user can change any or all options.
 
 **Q1: Save cadence** — How often should memory be updated?
 - Every major milestone (default) — updates at decisions, milestones, session breaks
@@ -52,7 +53,14 @@ Use `AskUserQuestion` to present the same 5 questions from Phase 1 of the main s
 - Summary (default) — one-line confirmation
 - Verbose — full detail
 
-**Q5: Active files** — Which memory files to activate? (multi-select, config.md and BOOTSTRAP.md always active)
+**Q5: Maintain agent model** — Which model should handle memory updates?
+- Haiku (default) — fastest and cheapest, good for mechanical file edits
+- Sonnet — balanced, better at nuanced updates
+- Opus — most capable, highest cost
+
+*Note: Session-start and recall agents always use your current model.*
+
+**Q6: Active files** — Which memory files to activate? (multi-select, config.md and BOOTSTRAP.md always active)
 - memory.md, assets.md, decisions.md, processes.md, preferences.md, lessons.md, timeline.md, summaries.md, progress.md, last.md, graph.md, vectors.md, taxonomies.md, standinginstructions.md
 
 ### Step 3 — Write updated config

@@ -38,6 +38,13 @@ Run `/pmm-settings` at any time to change these.
 - Mode: summary
 <!-- Options: silent | summary | verbose -->
 
+## Maintain Agent Model
+
+<!-- Which model handles memory updates (maintain phase) -->
+- Model: haiku
+<!-- Options: haiku (default, cheapest) | sonnet (balanced) | opus (most capable) -->
+<!-- Session-start and recall agents always use the parent model -->
+
 ## Active Files
 
 <!-- Which memory files are active. Deactivated files are not created or loaded. -->
