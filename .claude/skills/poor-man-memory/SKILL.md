@@ -13,6 +13,8 @@ A lightweight, git-backed structured memory system for Claude Code. No infrastru
 
 Use the `general-purpose` agent type for all memory operations. Agents have access to Read, Write, Edit, Glob, and Grep tools.
 
+**Model selection:** The maintain agent uses the model specified in `config.md` (default: `haiku`). Session-start and recall agents inherit the parent model since they need higher fidelity for summarisation and search. When dispatching the maintain agent, pass the `model` parameter from config.
+
 **Agents do NOT run git commands.** After any agent that writes files, the main context handles the commit:
 
 ```bash
@@ -105,7 +107,14 @@ Ask these questions (use interactive question tool with options):
 - Summary (default) — one-line confirmation after updates
 - Verbose — full detail of what changed
 
-**Q5: Active files** — Which memory files do you want? All are active by default. Deselect any you don't need.
+**Q5: Maintain agent model** — Which model should handle memory updates?
+- Haiku (default) — fastest and cheapest, good for mechanical file edits
+- Sonnet — balanced, better at nuanced updates
+- Opus — most capable, highest cost
+
+*Explain: The maintain agent does structured file edits — reading files, appending entries, replacing sections. Haiku handles this well and costs ~10x less than Opus. Session-start and recall agents always use your current model for higher fidelity.*
+
+**Q6: Active files** — Which memory files do you want? All are active by default. Deselect any you don't need.
 - [multi-select] memory.md, assets.md, decisions.md, processes.md, preferences.md, lessons.md, timeline.md, summaries.md, progress.md, last.md, graph.md, vectors.md, taxonomies.md, standinginstructions.md
 
 *Explain: Deactivated files won't be created and won't appear in BOOTSTRAP.md. You can activate them later with `/pmm-settings`. Core files (config.md, BOOTSTRAP.md) are always active.*
@@ -180,7 +189,7 @@ Replace `<skill-base>` with the actual skill base directory path.
 
 **When:** New information emerges that should persist (see trigger table below).
 
-**Dispatch:** Launch a `general-purpose` agent (in background when possible) with this prompt:
+**Dispatch:** Launch a `general-purpose` agent (in background when possible) with the model from `config.md` (default: `haiku`) and this prompt:
 
 > Update the poor-man-memory files. This is a WRITE task — edit files only. Do NOT run any git commands.
 >
