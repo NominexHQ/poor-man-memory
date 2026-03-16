@@ -115,7 +115,7 @@ git commit -m "memory: <what changed>"
 
 - Never edit this file unless explicitly asked
 - Never delete entries from decisions.md or standinginstructions.md
-- timeline.md is a sliding window (20 entries max) — trim oldest, full history is in git
+- timeline.md and summaries.md are sliding windows — see config.md for max entries. Trim oldest, full history is in git
 - Never hallucinate past context — if it's not in the files, say so
 - last.md is always replaced, never appended
 - graph.md edges are append-only — use typed relationships only
