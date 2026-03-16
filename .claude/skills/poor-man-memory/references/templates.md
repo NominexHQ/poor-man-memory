@@ -1,0 +1,437 @@
+# Memory File Templates
+
+Initial content for each file in the poor-man-memory system.
+
+---
+
+## config.md
+
+```markdown
+# PMM Configuration
+
+Settings that control how Poor Man's Memory behaves.
+Run `/pmm-settings` at any time to change these.
+
+## Save Cadence
+
+<!-- How often memory is updated -->
+- Mode: every-milestone
+<!-- Options: every-milestone | every-N-messages (specify N) | on-request-only -->
+<!-- Note: For fine-grained control, use /loop to run a save prompt on a recurring interval -->
+
+## Commit Behaviour
+
+<!-- When changes are committed to git -->
+- Mode: auto-commit
+<!-- Options: auto-commit | session-end | manual -->
+
+## Sliding Window Size
+
+<!-- Max entries in windowed files (timeline, summaries) before trimming -->
+- Timeline max: 50
+- Summaries max: 10
+<!-- Presets: light (30/5) | moderate (50/10) | heavy (100/20) | unlimited -->
+
+## Verbosity
+
+<!-- How memory updates are communicated -->
+- Mode: summary
+<!-- Options: silent | summary | verbose -->
+
+## Active Files
+
+<!-- Which memory files are active. Deactivated files are not created or loaded. -->
+<!-- config.md and BOOTSTRAP.md are always active. -->
+- memory.md: active
+- assets.md: active
+- decisions.md: active
+- processes.md: active
+- preferences.md: active
+- lessons.md: active
+- timeline.md: active
+- summaries.md: active
+- progress.md: active
+- last.md: active
+- graph.md: active
+- vectors.md: active
+- taxonomies.md: active
+- standinginstructions.md: active
+```
+
+---
+
+## BOOTSTRAP.md
+
+```markdown
+# Claude Instructions
+
+## Memory System
+
+This project uses a structured memory system in the `memory/` folder.
+All memory operations run via agents (subprocesses) — never in the main context window.
+
+At session start, dispatch an agent to read all files and return a structured summary:
+
+@memory/BOOTSTRAP.md
+@memory/standinginstructions.md
+@memory/progress.md
+@memory/last.md
+@memory/graph.md
+@memory/vectors.md
+@memory/decisions.md
+@memory/taxonomies.md
+@memory/memory.md
+@memory/assets.md
+@memory/preferences.md
+@memory/processes.md
+@memory/lessons.md
+@memory/summaries.md
+@memory/timeline.md
+
+## Update Protocol
+
+Dispatch a maintain agent when:
+- A decision is made
+- A new entity, process, or preference is established
+- A milestone is reached or a blocker is hit
+- A mistake is made or a lesson is learned
+- Before any /compact operation
+- At the end of every major piece of work
+
+Agents edit files only. Main context handles git:
+```bash
+git add memory/
+git commit -m "memory: <what changed>"
+```
+
+## Rules
+
+- Never edit this file unless explicitly asked
+- Never delete entries from decisions.md or standinginstructions.md
+- timeline.md is a sliding window (20 entries max) — trim oldest, full history is in git
+- Never hallucinate past context — if it's not in the files, say so
+- last.md is always replaced, never appended
+- graph.md edges are append-only — use typed relationships only
+- vectors.md similarities/clusters are living; embedding registry is append-only
+- standinginstructions.md takes precedence over session-level instructions
+- Keep each file focused on its specific job
+```
+
+---
+
+## memory.md
+
+```markdown
+# Memory
+
+Long-term facts about this project and context.
+Updated when new durable facts are established.
+
+## Project
+
+<!-- What is this project? What is it for? -->
+
+## Context
+
+<!-- Background the agent needs to operate effectively -->
+
+## Key Facts
+
+<!-- Important facts that should never be forgotten -->
+```
+
+---
+
+## assets.md
+
+```markdown
+# Assets
+
+Key entities this project involves — people, tools, systems, organisations.
+Updated when new entities are introduced.
+
+## People
+
+| Name | Role | Notes |
+|---|---|---|
+| | | |
+
+## Tools & Systems
+
+| Name | Purpose | Notes |
+|---|---|---|
+| | | |
+
+## Organisations
+
+| Name | Relationship | Notes |
+|---|---|---|
+| | | |
+
+## Other
+
+<!-- Anything that doesn't fit above -->
+```
+
+---
+
+## decisions.md
+
+```markdown
+# Decisions
+
+Committed decisions. Append-only — never delete or modify past entries.
+Each entry is ratified and should be treated as ground truth unless explicitly reversed.
+
+## Format
+
+**[Date] — [Decision]**
+Context: why this was decided
+Ratified by: [user / consensus / default]
+
+---
+
+<!-- Decisions go here, newest at top -->
+```
+
+---
+
+## processes.md
+
+```markdown
+# Processes
+
+Workflows and processes developed or established during this project.
+Updated when new processes are created or existing ones change.
+
+<!-- Format: ## Process Name, then steps or description -->
+```
+
+---
+
+## preferences.md
+
+```markdown
+# Preferences
+
+User-specific quirks, style preferences, and working habits.
+Updated when preferences are observed or explicitly stated.
+
+## Communication
+
+<!-- How the user prefers to communicate -->
+
+## Code & Technical
+
+<!-- Technical preferences — style, patterns, conventions -->
+
+## Workflow
+
+<!-- How the user likes to work -->
+
+## Format
+
+<!-- Output format preferences -->
+```
+
+---
+
+## lessons.md
+
+```markdown
+# Lessons
+
+Mistakes made and lessons learned. Append-only.
+Reference before making decisions in areas where past mistakes occurred.
+
+## Format
+
+**[Date] — [Lesson]**
+What happened: 
+What to do instead:
+
+---
+
+<!-- Lessons go here, newest at top -->
+```
+
+---
+
+## timeline.md
+
+```markdown
+# Timeline
+
+Compressed chronological record of key events and milestones.
+Sliding window — keep only the 20 most recent entries. Older entries live in git history.
+
+## Format
+
+**[Date]** — [What happened]
+
+---
+
+<!-- Timeline entries go here, newest at bottom. Trim oldest when exceeding 20 entries. -->
+```
+
+---
+
+## summaries.md
+
+```markdown
+# Summaries
+
+Periodic rollups of past work — session summaries, milestone summaries, and compressed timeline batches.
+Sliding window — keep only the 10 most recent summaries. Older summaries live in git history.
+
+## Format
+
+### [Date range] — [Summary title]
+[2-4 sentence summary of what happened, key outcomes, and any context worth preserving]
+
+---
+
+<!-- Summaries go here, newest at top. Trim oldest when exceeding 10 entries. -->
+```
+
+---
+
+## progress.md
+
+```markdown
+# Progress
+
+Current state, milestones, and what's next.
+Updated whenever state changes meaningfully.
+
+## Current State
+
+<!-- Where things stand right now -->
+
+## Completed
+
+<!-- What has been finished -->
+
+## In Progress
+
+<!-- What is actively being worked on -->
+
+## Blocked
+
+<!-- What is blocked and why -->
+
+## Next
+
+<!-- The immediate next actions -->
+```
+
+---
+
+## last.md
+
+```markdown
+# Last Session
+
+The last few significant actions in detail.
+Always replaced — this is a window, not a log.
+
+<!-- What happened most recently, in enough detail to pick up immediately -->
+```
+
+---
+
+## graph.md
+
+```markdown
+# Graph
+
+How everything in this project relates. Typed edges between concepts, decisions, entities, and processes.
+Append-only — add new relationships, never remove existing ones.
+Rendered as a visual graph in Obsidian. Traversable by Claude as structured context.
+
+## Format
+
+[[Node A]] → relationship → [[Node B]]
+
+Use typed relationships from references/graph-syntax.md.
+
+---
+
+<!-- Graph entries go here — add new edges as relationships are discovered -->
+```
+
+---
+
+## taxonomies.md
+
+```markdown
+# Taxonomies
+
+Classification systems, categories, and naming conventions used in this project.
+Updated when new classification systems are established or existing ones refined.
+Track changes — note when a taxonomy evolves so historical references remain interpretable.
+
+## Format
+
+### [Taxonomy Name]
+*Purpose: what this classifies*
+*Last updated: [date]*
+
+| Term | Definition | Notes |
+|---|---|---|
+| | | |
+
+---
+
+<!-- Taxonomies go here -->
+```
+
+---
+
+## standinginstructions.md
+
+```markdown
+# Standing Instructions
+
+Persistent rules and directives that always apply, regardless of session context.
+Append-only — never delete or modify existing entries.
+These take precedence over session-level instructions when there is a conflict.
+
+## Format
+
+**[Date added] — [Instruction]**
+Scope: [always / for X context only]
+Reason: [why this was added]
+
+---
+
+<!-- Standing instructions go here, newest at top -->
+```
+
+---
+
+## vectors.md
+
+```markdown
+# Vectors
+
+Semantic similarities, concept clusters, and embedding provenance.
+The soft companion to graph.md — implicit weighted relationships rather than explicit typed edges.
+Similarities and clusters are living documents. Embedding registry is append-only.
+
+Use formats from references/vector-syntax.md.
+
+## Similarities
+
+<!-- [[A]] ↔ [[B]] | score: 0.XX | basis: why -->
+
+## Clusters
+
+<!-- Cluster: name → [[[A]], [[B]]] | theme: what unifies them -->
+
+## Embedding Registry
+
+| Entity | Model | Dimensions | Location | Date | Notes |
+|---|---|---|---|---|---|
+| | | | | | |
+```

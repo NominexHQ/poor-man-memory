@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git add memory/*)",
+      "Bash(git commit -m 'memory:*')",
+      "Bash(git push origin main*)"
+    ]
+  }
+}

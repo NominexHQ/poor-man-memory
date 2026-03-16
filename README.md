@@ -1,0 +1,119 @@
+# Poor Man's Memory
+
+Persistent structured memory for Claude Code. No infrastructure required — just markdown files and git.
+
+## What It Does
+
+Gives Claude a second brain that survives between sessions. Every decision, lesson, preference, and relationship is captured in dedicated markdown files, committed to git, and loaded at the start of each session. Each file has one job — no single blob that loses fidelity over time.
+
+## Installation
+
+This is a **clone-and-go project directory** — no manual setup, no file copying, no configuration wiring. Everything Claude Code needs is already in place (`.claude/skills/`, `settings.json`, `CLAUDE.md`).
+
+```bash
+git clone https://github.com/NominexHQ/poor-man-memory.git my-project
+cd my-project
+claude  # or open with your Claude Code IDE integration
+```
+
+Then tell Claude:
+
+```
+init memory
+```
+
+That's it. Claude will prompt you for preferences (save cadence, verbosity, active files) and scaffold the `memory/` directory. From then on, memory updates happen automatically.
+
+## Adding to an Existing Project
+
+If you already have a project and just want to drop in the memory system:
+
+1. Copy these into your project root:
+   ```
+   .claude/skills/poor-man-memory/    # Main skill + reference docs
+   .claude/skills/pmm-settings/       # Settings command
+   CLAUDE.md                          # Bootstrap instructions for Claude
+   ```
+
+2. **(Optional)** Merge the pre-approved git permissions into your existing `.claude/settings.json`:
+   ```json
+   {
+     "permissions": {
+       "allow": [
+         "Bash(git add memory/*)",
+         "Bash(git commit -m 'memory:*')",
+         "Bash(git push origin main*)"
+       ]
+     }
+   }
+   ```
+   Skip this if you prefer to approve git commands manually, or if you already have a `settings.json` you don't want to modify.
+
+3. If you already have a `CLAUDE.md`, append the contents rather than overwriting — or just add:
+   ```markdown
+   ## Memory System
+   This project uses Poor Man's Memory. Run `init memory` if the `memory/` directory doesn't exist.
+   Run `/pmm-settings` to configure.
+   ```
+
+4. Open the project with Claude Code and say `init memory`.
+
+The `memory/` directory will be created inside your project. Add it to version control — git history is the database.
+
+## Memory Files
+
+| File | Purpose | Mutability |
+|---|---|---|
+| `config.md` | PMM settings | Living |
+| `BOOTSTRAP.md` | Load instructions | Immutable |
+| `memory.md` | Long-term project facts | Living |
+| `assets.md` | People, tools, systems | Living |
+| `decisions.md` | Committed decisions | Append-only |
+| `processes.md` | Workflows | Living |
+| `preferences.md` | User working style | Living |
+| `lessons.md` | Mistakes and fixes | Append-only |
+| `timeline.md` | Recent events | Sliding window |
+| `summaries.md` | Periodic rollups | Sliding window |
+| `progress.md` | Current state | Living |
+| `last.md` | Last session detail | Always replaced |
+| `graph.md` | Typed relationships | Append-only |
+| `vectors.md` | Semantic similarities | Living (registry append-only) |
+| `taxonomies.md` | Classifications | Living |
+| `standinginstructions.md` | Persistent rules | Append-only |
+
+## Configuration
+
+Run `/pmm-settings` at any time to change:
+
+- **Save cadence** — every milestone, every N messages, or on request only
+- **Commit behaviour** — auto-commit, session end, or manual
+- **Sliding window size** — how many entries before trimming (git has full history)
+- **Verbosity** — silent, summary, or verbose
+- **Active files** — deactivate files you don't need
+
+## How Git Works as Your Database
+
+Every memory update is committed to git. Sliding window files (timeline, summaries) are trimmed to keep the working set small, but the full history is always available via `git log`. This gives you:
+
+- Immutable audit trail
+- Diffable changes
+- Rollback to any point
+- Free hosting on GitHub
+
+## Architecture
+
+Memory operations run in **agents** (subprocesses), never in the main context window. This keeps your conversation clean — agents handle file I/O, and the main context commits to git.
+
+## Built by Nominex
+
+Nominex is the memory layer for AI agents.
+
+AI agents reset every session. Context vanishes, preferences disappear, and every conversation starts from zero. Nominex builds the infrastructure that makes agents smarter over time, not just bigger per-request.
+
+Poor Man's Memory is the zero-infrastructure starting point — structured markdown and git. For teams that need semantic search, shared memory across agents, and automated enrichment, that's where [Nominex](https://github.com/NominexHQ) comes in.
+
+[GitHub](https://github.com/NominexHQ) | [X](https://x.com/nominex_ai)
+
+## License
+
+MIT
