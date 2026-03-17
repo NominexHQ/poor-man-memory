@@ -59,8 +59,8 @@ memory/
 ├── last.md                   # Last few actions in detail — high fidelity recent context
 ├── graph.md                  # How everything relates — typed edges between concepts, decisions, entities
 ├── vectors.md                # Semantic similarities, concept clusters, and embedding provenance
+├── voices.md                 # Tone profiles and internal reasoning patterns
 ├── taxonomies.md             # Classification systems, categories, and naming conventions used in this project
-├── voices.md                 # Tone profiles and internal dialogue patterns — how Claude communicates and reasons
 └── standinginstructions.md   # Persistent rules and directives that always apply — never expire
 ```
 
@@ -116,7 +116,7 @@ Ask these questions (use interactive question tool with options):
 *Explain: The maintain agent does structured file edits — reading files, appending entries, replacing sections. Haiku handles this well and costs ~10x less than Opus. Session-start and recall agents always use your current model for higher fidelity.*
 
 **Q6: Active files** — Which memory files do you want? All are active by default. Deselect any you don't need.
-- [multi-select] memory.md, assets.md, decisions.md, processes.md, preferences.md, lessons.md, timeline.md, summaries.md, progress.md, last.md, graph.md, vectors.md, taxonomies.md, voices.md, standinginstructions.md
+- [multi-select] memory.md, assets.md, decisions.md, processes.md, preferences.md, voices.md, lessons.md, timeline.md, summaries.md, progress.md, last.md, graph.md, vectors.md, taxonomies.md, standinginstructions.md
 
 *Explain: Deactivated files won't be created and won't appear in BOOTSTRAP.md. You can activate them later with `/pmm-settings`. Core files (config.md, BOOTSTRAP.md) are always active.*
 
@@ -155,20 +155,20 @@ Replace `<skill-base>` with the actual skill base directory path.
 > 1. `config.md` — PMM configuration (controls behaviour for all phases)
 > 2. `BOOTSTRAP.md` — operating instructions
 > 3. `standinginstructions.md` — persistent rules that always apply
-> 4. `progress.md` — where we are
-> 5. `last.md` — what just happened
-> 6. `graph.md` — how everything relates
-> 7. `vectors.md` — semantic similarities and clusters
-> 8. `decisions.md` — what's been committed to
-> 9. `taxonomies.md` — classification systems and naming conventions
-> 10. `voices.md` — tone profiles and internal dialogue patterns
-> 11. `memory.md` — long-term facts
-> 12. `assets.md` — key entities
-> 13. `preferences.md` — how to work
-> 14. `processes.md` — how things are done
-> 15. `lessons.md` — what not to repeat
-> 16. `summaries.md` — periodic rollups of past work
-> 17. `timeline.md` — the broader arc
+> 3. `progress.md` — where we are
+> 4. `last.md` — what just happened
+> 5. `graph.md` — how everything relates
+> 6. `vectors.md` — semantic similarities and clusters
+> 7. `decisions.md` — what's been committed to
+> 8. `taxonomies.md` — classification systems and naming conventions
+> 9. `memory.md` — long-term facts
+> 10. `assets.md` — key entities
+> 11. `preferences.md` — how to work
+> 12. `voices.md` — tone profiles and reasoning lenses
+> 13. `processes.md` — how things are done
+> 14. `lessons.md` — what not to repeat
+> 15. `summaries.md` — periodic rollups of past work
+> 16. `timeline.md` — the broader arc
 >
 > Only read files that are active per config.md. Skip deactivated files.
 >
@@ -178,11 +178,10 @@ Replace `<skill-base>` with the actual skill base directory path.
 > - **Current state** — from progress.md and last.md
 > - **Key decisions** — from decisions.md (all entries, verbatim)
 > - **Active relationships** — from graph.md and vectors.md (non-empty entries only)
-> - **Context** — from memory.md, assets.md, preferences.md, processes.md (non-empty sections only)
+> - **Context** — from memory.md, assets.md, preferences.md, voices.md, processes.md (non-empty sections only)
 > - **Lessons** — from lessons.md (all entries, verbatim)
 > - **Timeline** — from timeline.md (last 10 entries)
 > - **Taxonomies** — from taxonomies.md (non-empty entries only)
-> - **Voices** — from voices.md (tone profiles and internal dialogue lenses, non-empty entries only)
 >
 > Skip sections where all source files are empty/template-only. Be concise but preserve fidelity — don't paraphrase decisions, instructions, or lessons.
 
@@ -197,7 +196,7 @@ Replace `<skill-base>` with the actual skill base directory path.
 > Update the poor-man-memory files. This is a WRITE task — edit files only. Do NOT run any git commands.
 >
 > Working directory: `<project-root>`
-> Reference files are in `<skill-base>/references/` (graph-syntax.md, vector-syntax.md, voice-syntax.md for format rules).
+> Reference files are in `<skill-base>/references/` (graph-syntax.md, vector-syntax.md for format rules).
 >
 > **First:** Read `memory/config.md` for active configuration. Respect:
 > - **Window size** — use the configured max entries for timeline.md and summaries.md
@@ -219,7 +218,6 @@ Replace `<skill-base>` with the actual skill base directory path.
 > - `vectors.md` — similarities/clusters are living (update in place), embedding registry is append-only. Use formats per references/vector-syntax.md
 > - `last.md` — ALWAYS replace entirely with the last 3-5 significant actions
 > - `taxonomies.md` — living document, track changes
-> - `voices.md` — living document, use formats per references/voice-syntax.md
 > - All other files — living documents, update in place
 > - Never bleed content between files — each file has one job
 >
@@ -231,6 +229,7 @@ Replace `<skill-base>` with the actual skill base directory path.
 > | `decisions.md` | Decision made and committed to |
 > | `processes.md` | New process established or existing one updated |
 > | `preferences.md` | User preference observed or stated |
+> | `voices.md` | New tone profile defined, internal dialogue pattern established or refined |
 > | `lessons.md` | Mistake made or lesson explicitly noted |
 > | `timeline.md` | Major milestone or event worth preserving |
 > | `summaries.md` | Session end, major milestone completed, or timeline entries about to be trimmed — summarise and append |
@@ -239,7 +238,6 @@ Replace `<skill-base>` with the actual skill base directory path.
 > | `graph.md` | New relationship discovered, decision affects another concept |
 > | `vectors.md` | New semantic similarity discovered, cluster formed or revised, entity embedded |
 > | `taxonomies.md` | New category, classification system, or naming convention established |
-> | `voices.md` | New tone profile defined, internal dialogue lens created, or existing voice refined |
 > | `standinginstructions.md` | User issues a persistent rule or directive |
 >
 > Return a one-line summary of what was updated.
@@ -264,6 +262,7 @@ git add memory/ && git commit -m "memory: <brief description>" && git push origi
 > 1. Check the most relevant memory file(s) first based on the question type:
 >    - Decisions → decisions.md
 >    - Preferences → preferences.md
+>    - Tone/voice/reasoning → voices.md
 >    - Recent work → last.md, progress.md
 >    - Relationships → graph.md, vectors.md
 >    - History → timeline.md
@@ -273,7 +272,6 @@ git add memory/ && git commit -m "memory: <brief description>" && git push origi
 >    - Processes → processes.md
 >    - Mistakes → lessons.md
 >    - Categories → taxonomies.md
->    - Tone/voice/dialogue → voices.md
 > 2. If not found, check `timeline.md` and `last.md`
 > 3. If still not found, search git history: `git log --all --grep="<keyword>" --oneline`
 > 4. If still not found, say: "No record found in the memory files."
@@ -284,6 +282,53 @@ git add memory/ && git commit -m "memory: <brief description>" && git push origi
 Replace `<user's question>` with the actual query.
 
 **After agent returns:** Relay the findings to the user. If nothing was found, say so honestly.
+
+### Phase 5 — Hydrate (new files in existing installations)
+
+**When:** A new memory file is added to the skill (via PMM update) but the user already has an existing `memory/` directory with populated files. The new file would be created from its empty template, missing all the context that existing files already hold.
+
+**This is not a greenfield install.** The existing memory files contain history, decisions, preferences, and patterns that should inform the new file's initial content.
+
+**Dispatch:** Launch a `general-purpose` agent with this prompt:
+
+> Hydrate a newly added memory file from existing memory. This is a WRITE task — edit the new file only. Do NOT run any git commands.
+>
+> **New file:** `<new-file-name>` (just created from template — currently empty/boilerplate)
+> **Purpose:** `<what this file captures>`
+> **Reference:** `<skill-base>/references/<relevant-syntax>.md` for format rules
+>
+> **Instructions:**
+> 1. Read ALL existing memory files to build context:
+>    - timeline.md, summaries.md — what happened over time
+>    - decisions.md — what was decided and why
+>    - lessons.md — what went wrong and what to do instead
+>    - preferences.md — how the user works
+>    - processes.md — established workflows
+>    - standinginstructions.md — persistent rules
+>    - memory.md — long-term facts
+>    - assets.md — people, tools, systems
+>    - graph.md, vectors.md — relationships and similarities
+>    - last.md, progress.md — recent context
+> 2. Infer content for the new file based on what the existing files reveal.
+>    - Do not copy content — synthesise. Each file has one job.
+>    - Use the format defined in the reference doc.
+>    - Only add entries you can justify from the existing memory. Do not hallucinate.
+> 3. Write the inferred content to the new file.
+> 4. Return a summary of what was inferred and from which source files.
+
+Replace `<new-file-name>`, `<purpose>`, `<skill-base>`, and `<relevant-syntax>` with actual values.
+
+**After agent returns:** Main context commits:
+```bash
+git add memory/<new-file> && git commit -m "memory: hydrate <new-file> from existing memory"
+```
+
+**When to trigger:**
+- After a PMM version update that introduces new memory files
+- When a user activates a previously deactivated file (via `/pmm-settings`) in a project with existing memory
+- When the user explicitly asks to populate a file from existing context
+
+**Important:** Always hydrate before the first maintain cycle touches the new file. An empty file that gets maintained stays shallow — a hydrated file starts with the full context the system already has.
 
 ## Rules
 
@@ -296,7 +341,6 @@ Replace `<user's question>` with the actual query.
 - `graph.md` edges are append-only — add new relationships, never remove existing ones
 - `vectors.md` similarities and clusters are living documents — update scores and memberships as understanding evolves. Embedding registry entries are append-only.
 - `taxonomies.md` is a living document — update classifications as they evolve, but track changes
-- `voices.md` is a living document — update tone profiles and dialogue lenses as they evolve. Use formats per references/voice-syntax.md
 - All other files are living documents — update in place
 - Commit after every meaningful update, not just at session end
 - Keep each file focused on its job — don't bleed content between files
@@ -323,4 +367,4 @@ This command is implemented as a separate skill at `.claude/skills/pmm-settings/
 - `references/templates.md` — initial content templates for all memory files
 - `references/graph-syntax.md` — edge types, relationship vocabulary, and graph.md examples
 - `references/vector-syntax.md` — similarity format, cluster format, embedding registry, and vectors.md examples
-- `references/voice-syntax.md` — tone profile format, internal dialogue lens format, and voices.md examples
+- `references/voice-syntax.md` — tone profile format, internal dialogue format, and voices.md examples

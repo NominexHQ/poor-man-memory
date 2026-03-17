@@ -54,6 +54,7 @@ Run `/pmm-settings` at any time to change these.
 - decisions.md: active
 - processes.md: active
 - preferences.md: active
+- voices.md: active
 - lessons.md: active
 - timeline.md: active
 - summaries.md: active
@@ -62,7 +63,6 @@ Run `/pmm-settings` at any time to change these.
 - graph.md: active
 - vectors.md: active
 - taxonomies.md: active
-- voices.md: active
 - standinginstructions.md: active
 ```
 
@@ -88,10 +88,10 @@ At session start, dispatch an agent to read all files and return a structured su
 @memory/vectors.md
 @memory/decisions.md
 @memory/taxonomies.md
-@memory/voices.md
 @memory/memory.md
 @memory/assets.md
 @memory/preferences.md
+@memory/voices.md
 @memory/processes.md
 @memory/lessons.md
 @memory/summaries.md
@@ -106,6 +106,8 @@ Dispatch a maintain agent when:
 - A mistake is made or a lesson is learned
 - Before any /compact operation
 - At the end of every major piece of work
+
+Memory updates are proactive — do not ask the user for permission before saving. The system captures what matters based on the triggers above.
 
 Agents edit files only. Main context handles git:
 ```bash
@@ -241,6 +243,41 @@ Updated when preferences are observed or explicitly stated.
 ## Format
 
 <!-- Output format preferences -->
+```
+
+---
+
+## voices.md
+
+```markdown
+# Voices
+
+Tone profiles and internal reasoning patterns.
+Living document — update when new voices are defined or existing ones refined.
+
+Use formats from references/voice-syntax.md.
+
+## Tone Profiles
+
+Named voices that control how Claude communicates. Switch based on context or explicit instruction.
+
+### [Voice Name]
+*Use when: [context trigger]*
+*Traits: [2-3 defining characteristics]*
+*Example: [one sentence in this voice]*
+
+<!-- Add tone profiles here -->
+
+## Internal Dialogue
+
+Reasoning lenses Claude applies when making decisions. Not output personas — thinking tools.
+
+### [Lens Name]
+*Role: [what this lens does]*
+*Asks: [the key question this lens raises]*
+*Use when: [when to activate this lens]*
+
+<!-- Add reasoning lenses here -->
 ```
 
 ---
@@ -443,39 +480,4 @@ Use formats from references/vector-syntax.md.
 | Entity | Model | Dimensions | Location | Date | Notes |
 |---|---|---|---|---|---|
 | | | | | | |
-```
-
----
-
-## voices.md
-
-```markdown
-# Voices
-
-Tone profiles and internal reasoning patterns.
-Living document — update when new voices are defined or existing ones refined.
-
-Use formats from references/voice-syntax.md.
-
-## Tone Profiles
-
-Named voices that control how Claude communicates. Switch based on context or explicit instruction.
-
-### [Voice Name]
-*Use when: [context trigger]*
-*Traits: [2-3 defining characteristics]*
-*Example: [one sentence in this voice]*
-
-<!-- Add tone profiles here -->
-
-## Internal Dialogue
-
-Reasoning lenses Claude applies when making decisions. Not output personas — thinking tools.
-
-### [Lens Name]
-*Role: [what this lens does]*
-*Asks: [the key question this lens raises]*
-*Use when: [when to activate this lens]*
-
-<!-- Add reasoning lenses here -->
 ```
