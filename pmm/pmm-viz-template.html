@@ -94,18 +94,61 @@
     background: #161b22;
     border: 1px solid #30363d;
     border-radius: 8px;
-    padding: 10px 16px;
+    padding: 10px 16px 8px;
     display: none;
+    flex-direction: column;
+    gap: 4px;
+    font-size: 12px;
+    min-width: 520px;
+    max-width: 750px;
+  }
+  #timeline-top {
+    display: flex;
     align-items: center;
     gap: 10px;
-    font-size: 12px;
-    min-width: 480px;
-    max-width: 700px;
+  }
+  #timeline-track-wrap {
+    position: relative;
+    flex: 1;
+    height: 28px;
   }
   #time-slider {
-    flex: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 20px;
     accent-color: #4a9eff;
     cursor: pointer;
+    margin: 0;
+    z-index: 2;
+  }
+  #commit-ticks {
+    position: absolute;
+    top: 20px;
+    left: 0;
+    width: 100%;
+    height: 8px;
+    z-index: 1;
+  }
+  .commit-tick {
+    position: absolute;
+    top: 0;
+    width: 2px;
+    height: 6px;
+    background: #4a9eff;
+    border-radius: 1px;
+    opacity: 0.6;
+  }
+  .commit-tick.active { opacity: 1; background: #58a6ff; height: 8px; }
+  .commit-tick-label {
+    position: absolute;
+    top: 8px;
+    font-size: 8px;
+    color: #484f58;
+    transform: translateX(-50%);
+    white-space: nowrap;
+    pointer-events: none;
   }
   .time-btn {
     background: #21262d;
@@ -116,21 +159,28 @@
     cursor: pointer;
     font-size: 13px;
     line-height: 1;
+    flex-shrink: 0;
   }
   .time-btn:hover { background: #30363d; }
+  #timeline-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 2px;
+  }
   #time-label {
     color: #8b949e;
-    min-width: 200px;
-    text-align: center;
     font-size: 11px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 450px;
   }
   #time-counter {
     color: #4a9eff;
     font-size: 11px;
     white-space: nowrap;
+    flex-shrink: 0;
   }
 
   #tooltip {
@@ -193,12 +243,19 @@
 <div id="legend"></div>
 
 <div id="timeline-controls">
-  <button class="time-btn" id="time-step-back" title="Previous commit">&#9664;</button>
-  <button class="time-btn" id="time-play" title="Play/Pause">&#9654;</button>
-  <button class="time-btn" id="time-step-fwd" title="Next commit">&#9654;&#9654;</button>
-  <input type="range" id="time-slider" min="0" max="0" value="0" step="1">
-  <span id="time-counter"></span>
-  <span id="time-label">Latest</span>
+  <div id="timeline-top">
+    <button class="time-btn" id="time-step-back" title="Previous commit">&#9664;</button>
+    <button class="time-btn" id="time-play" title="Play/Pause">&#9654;</button>
+    <button class="time-btn" id="time-step-fwd" title="Next commit">&#9654;&#9654;</button>
+    <div id="timeline-track-wrap">
+      <input type="range" id="time-slider" min="0" max="0" value="0" step="1">
+      <div id="commit-ticks"></div>
+    </div>
+  </div>
+  <div id="timeline-bottom">
+    <span id="time-label">Latest</span>
+    <span id="time-counter"></span>
+  </div>
 </div>
 
 <div id="tooltip"></div>
@@ -513,7 +570,7 @@ const PMM_DATA = /*PMM_DATA_PLACEHOLDER*/{"nodes":[],"edges":[],"clusters":[],"t
     linkLabels.transition().duration(300).attr('opacity', d => d._labelVisible ? 1 : 0);
   }
 
-  // Timeline slider setup
+  // Timeline slider setup — dual scale: time (continuous) + commits (ticks)
   if (timeline.length > 1) {
     const tlControls = document.getElementById('timeline-controls');
     tlControls.style.display = 'flex';
@@ -521,11 +578,63 @@ const PMM_DATA = /*PMM_DATA_PLACEHOLDER*/{"nodes":[],"edges":[],"clusters":[],"t
     const slider = document.getElementById('time-slider');
     const label = document.getElementById('time-label');
     const counter = document.getElementById('time-counter');
-    slider.max = timeline.length - 1;
-    slider.value = timeline.length - 1;
+    const ticksEl = document.getElementById('commit-ticks');
 
-    let currentTimeIdx = timeline.length - 1;
+    // Time-based scale: slider min/max are timestamps
+    const tsMin = timeline[0].timestamp;
+    const tsMax = timeline[timeline.length - 1].timestamp;
+    const tsRange = tsMax - tsMin || 1;
+
+    // Use fine-grained steps (1000 positions for smooth scrubbing)
+    const SLIDER_STEPS = 1000;
+    slider.min = 0;
+    slider.max = SLIDER_STEPS;
+    slider.value = SLIDER_STEPS;
+    slider.step = 1;
+
+    // Map slider position to timestamp and back
+    function sliderToTs(val) { return tsMin + (val / SLIDER_STEPS) * tsRange; }
+    function tsToSlider(ts) { return Math.round(((ts - tsMin) / tsRange) * SLIDER_STEPS); }
+
+    // Find the nearest commit at or before a timestamp
+    function commitAtTs(ts) {
+      let best = 0;
+      for (let i = 0; i < timeline.length; i++) {
+        if (timeline[i].timestamp <= ts) best = i;
+        else break;
+      }
+      return best;
+    }
+
+    let currentCommitIdx = timeline.length - 1;
     let playInterval = null;
+
+    // Render commit tick marks on the track
+    function renderTicks() {
+      ticksEl.innerHTML = '';
+      timeline.forEach((commit, i) => {
+        const pct = ((commit.timestamp - tsMin) / tsRange) * 100;
+        // Tick mark
+        const tick = document.createElement('div');
+        tick.className = 'commit-tick' + (i === currentCommitIdx ? ' active' : '');
+        tick.style.left = pct + '%';
+        tick.title = commit.message;
+        ticksEl.appendChild(tick);
+      });
+      // Date labels at first and last tick (and middle if >4 commits)
+      const labelPositions = [0, timeline.length - 1];
+      if (timeline.length > 4) labelPositions.splice(1, 0, Math.floor(timeline.length / 2));
+      labelPositions.forEach(i => {
+        const commit = timeline[i];
+        const pct = ((commit.timestamp - tsMin) / tsRange) * 100;
+        const lbl = document.createElement('div');
+        lbl.className = 'commit-tick-label';
+        lbl.style.left = pct + '%';
+        const d = new Date(commit.timestamp * 1000);
+        lbl.textContent = d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+        ticksEl.appendChild(lbl);
+      });
+    }
 
     function formatDate(ts) {
       const d = new Date(ts * 1000);
@@ -541,29 +650,47 @@ const PMM_DATA = /*PMM_DATA_PLACEHOLDER*/{"nodes":[],"edges":[],"clusters":[],"t
     }
 
     function updateTimeline() {
-      const commit = timeline[currentTimeIdx];
+      const commit = timeline[currentCommitIdx];
       currentTimeTs = commit.timestamp;
-      const msg = commit.message.length > 45 ? commit.message.substring(0, 42) + '...' : commit.message;
+      const msg = commit.message.length > 40 ? commit.message.substring(0, 37) + '...' : commit.message;
       label.textContent = formatDate(commit.timestamp) + '  ' + msg;
+      renderTicks();
       updateVisibility();
       const counts = visibleCounts();
-      counter.textContent = counts.n + ' nodes, ' + counts.e + ' edges';
+      counter.textContent = counts.n + 'n ' + counts.e + 'e · commit ' + (currentCommitIdx + 1) + '/' + timeline.length;
     }
 
+    // Slider input: continuous time, snaps to nearest commit for graph state
     slider.addEventListener('input', () => {
-      currentTimeIdx = parseInt(slider.value);
+      const ts = sliderToTs(parseInt(slider.value));
+      currentCommitIdx = commitAtTs(ts);
       updateTimeline();
+      // Keep slider at the exact scrub position (don't snap the thumb)
+      // But update the graph to the nearest commit's state
     });
 
-    // Step buttons
+    // Double-click slider to snap thumb to nearest commit
+    slider.addEventListener('dblclick', () => {
+      slider.value = tsToSlider(timeline[currentCommitIdx].timestamp);
+    });
+
+    // Step buttons: jump to next/previous commit (major ticks)
     document.getElementById('time-step-back').addEventListener('click', () => {
-      if (currentTimeIdx > 0) { currentTimeIdx--; slider.value = currentTimeIdx; updateTimeline(); }
+      if (currentCommitIdx > 0) {
+        currentCommitIdx--;
+        slider.value = tsToSlider(timeline[currentCommitIdx].timestamp);
+        updateTimeline();
+      }
     });
     document.getElementById('time-step-fwd').addEventListener('click', () => {
-      if (currentTimeIdx < timeline.length - 1) { currentTimeIdx++; slider.value = currentTimeIdx; updateTimeline(); }
+      if (currentCommitIdx < timeline.length - 1) {
+        currentCommitIdx++;
+        slider.value = tsToSlider(timeline[currentCommitIdx].timestamp);
+        updateTimeline();
+      }
     });
 
-    // Play button
+    // Play button: auto-advance through commits
     const playBtn = document.getElementById('time-play');
     playBtn.addEventListener('click', function() {
       if (playInterval) {
@@ -573,21 +700,22 @@ const PMM_DATA = /*PMM_DATA_PLACEHOLDER*/{"nodes":[],"edges":[],"clusters":[],"t
         return;
       }
       this.innerHTML = '&#9646;&#9646;';
-      if (currentTimeIdx >= timeline.length - 1) { currentTimeIdx = 0; }
+      if (currentCommitIdx >= timeline.length - 1) { currentCommitIdx = 0; }
       playInterval = setInterval(() => {
-        if (currentTimeIdx >= timeline.length - 1) {
+        if (currentCommitIdx >= timeline.length - 1) {
           clearInterval(playInterval);
           playInterval = null;
           playBtn.innerHTML = '&#9654;';
           return;
         }
-        currentTimeIdx++;
-        slider.value = currentTimeIdx;
+        currentCommitIdx++;
+        slider.value = tsToSlider(timeline[currentCommitIdx].timestamp);
         updateTimeline();
       }, 800);
     });
 
-    // Set initial state to latest
+    // Initial render
+    renderTicks();
     updateTimeline();
   }
 })();
