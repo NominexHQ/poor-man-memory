@@ -25,6 +25,8 @@ At session start, dispatch an agent to read all files and return a structured su
 @memory/summaries.md
 @memory/timeline.md
 
+If `memory/secrets.md` exists, note that secrets are available for this session. Do not echo or summarise its contents.
+
 ## Update Protocol
 
 Dispatch a maintain agent when:
@@ -37,8 +39,7 @@ Dispatch a maintain agent when:
 
 Agents edit files only. Main context handles git:
 ```bash
-git add memory/
-git commit -m "memory: <what changed>"
+git add memory/ && git reset HEAD memory/secrets.md 2>/dev/null; git commit -m "memory: <what changed>"
 ```
 
 ## Rules

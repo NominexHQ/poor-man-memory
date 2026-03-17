@@ -64,6 +64,31 @@ Run `/pmm-settings` at any time to change these.
 - vectors.md: active
 - taxonomies.md: active
 - standinginstructions.md: active
+
+## Protected Files
+
+<!-- Files that are NEVER committed to git and NEVER read/written by the maintain agent -->
+<!-- These are local-only — gitignored and excluded from all memory operations -->
+- secrets.md: protected
+<!-- secrets.md stores API keys, tokens, and credentials — gitignored, machine-local -->
+```
+
+---
+
+## secrets.md
+
+```markdown
+# Secrets
+
+Local-only file — **never committed to git**. Store sensitive values (API keys, tokens, credentials) here.
+This file is gitignored. It exists only on this machine. Back it up separately if needed.
+
+Skills and agents that need a secret value will read this file by key name and use it silently — never echoing values in output.
+
+## Keys
+
+| Key | Value | Notes |
+|---|---|---|
 ```
 
 ---
@@ -97,6 +122,8 @@ At session start, dispatch an agent to read all files and return a structured su
 @memory/summaries.md
 @memory/timeline.md
 
+If `memory/secrets.md` exists, note that secrets are available for this session. Do not echo or summarise its contents.
+
 ## Update Protocol
 
 Dispatch a maintain agent when:
@@ -111,8 +138,7 @@ Memory updates are proactive — do not ask the user for permission before savin
 
 Agents edit files only. Main context handles git:
 ```bash
-git add memory/
-git commit -m "memory: <what changed>"
+git add memory/ && git reset HEAD memory/secrets.md 2>/dev/null; git commit -m "memory: <what changed>"
 ```
 
 ## Rules
