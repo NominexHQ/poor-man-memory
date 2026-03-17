@@ -373,6 +373,15 @@ Renders PMM memory state as inline ASCII visualizations. Three views available:
 
 This command is implemented as a separate skill at `.claude/skills/pmm-viz/SKILL.md`.
 
+### /pmm-save
+
+Explicitly triggers a memory save (Phase 3 — Maintain). Captures current session state into memory files and commits.
+
+- `/pmm-save` — save now
+- Compatible with `/loop` for recurring saves: `/loop 5m /pmm-save`
+
+This command is implemented as a separate skill at `.claude/skills/pmm-save/SKILL.md`.
+
 ## Reference Files
 
 - `references/templates.md` — initial content templates for all memory files

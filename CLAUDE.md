@@ -14,9 +14,21 @@ This will prompt you for preferences (save cadence, verbosity, active files, etc
 
 ## Commands
 
+- `/pmm-save` — Explicitly trigger a memory save
 - `/pmm-settings` — Change memory system configuration at any time
+- `/pmm-viz` — Visualize memory state as ASCII art (graph, heatmap, vectors)
 - `update memory` — Trigger a manual memory update
 - `summarise memory` — Get a summary of what's in memory
+
+## Recurring Saves
+
+For automatic memory saves on an interval:
+
+```
+/loop 5m /pmm-save
+```
+
+This runs `/pmm-save` every 5 minutes, capturing session state without manual intervention.
 
 ## How It Works
 
