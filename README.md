@@ -2,6 +2,20 @@
 
 Persistent structured memory for Claude Code. No infrastructure required — just markdown files and git.
 
+## Poor Man's Memory
+
+AI coding agents forget everything between sessions. Your decisions, preferences, lessons learned, and project context — gone. Every new conversation starts from zero. You repeat yourself. The agent makes the same mistakes. Context that took hours to build evaporates when the session ends.
+
+**Poor Man's Memory** fixes this. It's a structured memory system for Claude Code that persists across sessions using nothing but markdown files and git. No databases, no APIs, no infrastructure to maintain. Clone a repo, say "init memory", and your agent starts remembering.
+
+**Built for:** developers using Claude Code (CLI or IDE) who want their agent to accumulate knowledge over time — across sessions, across days, across the life of a project.
+
+**What it solves:**
+- Agent amnesia between sessions
+- Repeated context-setting at the start of every conversation
+- Lost decisions, forgotten preferences, repeated mistakes
+- No audit trail of what the agent knew and when
+
 ## What It Does
 
 Gives Claude a second brain that survives between sessions. Every decision, lesson, preference, and relationship is captured in dedicated markdown files, committed to git, and loaded at the start of each session. Each file has one job — no single blob that loses fidelity over time.
