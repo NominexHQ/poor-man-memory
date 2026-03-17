@@ -19,6 +19,7 @@ This will prompt you for preferences (save cadence, verbosity, active files, etc
 - `/pmm-dump` — ASCII memory dump (three levels: status, summary, detailed)
 - `/pmm-viz` — Interactive D3.js memory graph (opens in browser)
 - `/pmm-status` — Quick health dashboard (initialization, saves, file health)
+- `/pmm-update` — Check for and apply PMM system updates from upstream
 - `update memory` — Trigger a manual memory update
 - `summarise memory` — Get a summary of what's in memory
 

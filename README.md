@@ -109,6 +109,7 @@ The `memory/` directory will be created inside your project. Add it to version c
 | `/pmm-dump` | ASCII memory dump — three levels: status, summary, detailed |
 | `/pmm-viz` | Interactive D3.js memory graph — opens in browser |
 | `/pmm-status` | Quick health dashboard — initialization, saves, file health |
+| `/pmm-update` | Check for and apply PMM system updates from upstream |
 | `/loop 5m /pmm-save` | Auto-save memory every 5 minutes |
 
 ## Recurring Saves
