@@ -55,3 +55,10 @@ Run `/pmm-settings` at any time to change these.
 - vectors.md: active
 - taxonomies.md: active
 - standinginstructions.md: active
+
+## Protected Files
+
+<!-- Files that are NEVER committed to git and NEVER read/written by the maintain agent -->
+<!-- These are local-only — gitignored and excluded from all memory operations -->
+- secrets.md: protected
+<!-- secrets.md stores API keys, tokens, and credentials — gitignored, machine-local -->

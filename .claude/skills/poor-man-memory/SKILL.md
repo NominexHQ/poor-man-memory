@@ -18,9 +18,7 @@ Use the `general-purpose` agent type for all memory operations. Agents have acce
 **Agents do NOT run git commands.** After any agent that writes files, the main context handles the commit:
 
 ```bash
-git add memory/
-git commit -m "memory: <brief description>"
-git push origin main 2>/dev/null || true
+git add memory/ && git reset HEAD memory/secrets.md 2>/dev/null; git commit -m "memory: <brief description>" && git push origin main 2>/dev/null || true
 ```
 
 ## Reducing Permission Friction
@@ -131,8 +129,9 @@ Ask these questions (use interactive question tool with options):
 > 3. Read the config from `memory/config.md` to determine which files are active
 > 4. Create `memory/config.md` (already done) and `memory/BOOTSTRAP.md` (always created)
 > 5. Create each **active** memory file from its template. Skip deactivated files.
-> 6. Generate `BOOTSTRAP.md` content listing only the active files in the load order
-> 7. Return a confirmation listing all files created and any files skipped.
+> 6. Always create `memory/secrets.md` from its template (regardless of active files list) — it is local-only and gitignored.
+> 7. Generate `BOOTSTRAP.md` content listing only the active files in the load order
+> 8. Return a confirmation listing all files created and any files skipped.
 
 Replace `<skill-base>` with the actual skill base directory path.
 
@@ -172,6 +171,8 @@ Replace `<skill-base>` with the actual skill base directory path.
 >
 > Only read files that are active per config.md. Skip deactivated files.
 >
+> If `memory/secrets.md` exists, note that secrets are available for this session. Do not echo or summarise its contents.
+>
 > Return a structured summary with these sections:
 > - **Configuration** — from config.md (save cadence, commit behaviour, window size, verbosity, active files)
 > - **Standing instructions** — any persistent rules (verbatim, these take precedence)
@@ -203,6 +204,7 @@ Replace `<skill-base>` with the actual skill base directory path.
 > **First:** Read `memory/config.md` for active configuration. Respect:
 > - **Window size** — use the configured max entries for timeline.md and summaries.md
 > - **Active files** — only update files that are active. Skip deactivated files.
+> - **Protected files** — never read, write, or reference `secrets.md`. It contains sensitive values. If you encounter a secret value in the conversation context, do NOT write it to any memory file.
 > - Do NOT modify config.md itself.
 >
 > **What changed:**
