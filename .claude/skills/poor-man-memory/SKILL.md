@@ -400,6 +400,14 @@ Explicitly triggers a memory save (Phase 3 — Maintain). Captures current sessi
 
 This command is implemented as a separate skill at `.claude/skills/pmm-save/SKILL.md`.
 
+### /pmm-update
+
+Checks the upstream PMM repository for updates and applies them safely. System files (skills, templates, artifacts) are updated; user data (memory/) is never touched. Uses `pmm/version.json` as the version manifest.
+
+- `/pmm-update` — check for updates and apply if available
+
+This command is implemented as a separate skill at `.claude/skills/pmm-update/SKILL.md`.
+
 ## Reference Files
 
 - `references/templates.md` — initial content templates for all memory files
