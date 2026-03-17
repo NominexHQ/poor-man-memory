@@ -45,7 +45,9 @@ If you already have a project and just want to drop in the memory system:
 1. Copy these into your project root:
    ```
    .claude/skills/poor-man-memory/    # Main skill + reference docs
+   .claude/skills/pmm-save/           # Explicit save command
    .claude/skills/pmm-settings/       # Settings command
+   .claude/skills/pmm-viz/            # ASCII visualization command
    CLAUDE.md                          # Bootstrap instructions for Claude
    ```
 
@@ -94,6 +96,25 @@ The `memory/` directory will be created inside your project. Add it to version c
 | `vectors.md` | Semantic similarities | Living (registry append-only) |
 | `taxonomies.md` | Classifications | Living |
 | `standinginstructions.md` | Persistent rules | Append-only |
+
+## Commands
+
+| Command | What it does |
+|---|---|
+| `/pmm-save` | Explicitly trigger a memory save |
+| `/pmm-settings` | Change memory system configuration |
+| `/pmm-viz` | Visualize memory state as ASCII art (graph, heatmap, vectors) |
+| `/loop 5m /pmm-save` | Auto-save memory every 5 minutes |
+
+## Recurring Saves
+
+Memory updates happen automatically at milestones, but you can also run saves on a fixed interval:
+
+```
+/loop 5m /pmm-save
+```
+
+This uses Claude Code's built-in `/loop` command to run `/pmm-save` every 5 minutes — capturing decisions, preferences, and progress without manual intervention. Adjust the interval to your preference.
 
 ## Configuration
 

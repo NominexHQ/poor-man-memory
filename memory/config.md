@@ -8,7 +8,7 @@ Run `/pmm-settings` at any time to change these.
 <!-- How often memory is updated -->
 - Mode: every-milestone
 <!-- Options: every-milestone | every-N-messages (specify N) | on-request-only -->
-<!-- Note: For fine-grained control, use /loop to run a save prompt on a recurring interval -->
+<!-- Note: For fine-grained control, use /loop with /pmm-save (e.g. /loop 5m /pmm-save) -->
 
 ## Commit Behaviour
 
