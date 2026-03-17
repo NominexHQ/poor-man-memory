@@ -15,7 +15,7 @@ Lightweight trigger for Phase 3 (Maintain) of Poor Man's Memory. Captures curren
 4. Dispatch the maintain agent using the Phase 3 prompt from the main `poor-man-memory` skill (`.claude/skills/poor-man-memory/SKILL.md`, Phase 3 — Maintain section)
 5. After the agent returns, commit:
    ```bash
-   git add memory/ && git commit -m "memory: <brief description>" && git push origin main 2>/dev/null || true
+   git add memory/ && git reset HEAD memory/secrets.md 2>/dev/null; git commit -m "memory: <brief description>" && git push origin main 2>/dev/null || true
    ```
 6. Respect the verbosity setting from `config.md`:
    - `silent` — no output, just the agent status indicator
