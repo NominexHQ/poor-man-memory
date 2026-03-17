@@ -230,7 +230,12 @@ Updated when preferences are observed or explicitly stated.
 
 ## Communication
 
-<!-- How the user prefers to communicate -->
+### Directives
+<!-- How the user wants Claude to communicate — explicit instructions -->
+
+### User Voice
+<!-- Observed patterns in how the user communicates. Inferred from conversation, not stated. -->
+<!-- Vocabulary, cadence, decision style, request framing, idioms -->
 
 ## Code & Technical
 
