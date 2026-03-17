@@ -1,15 +1,18 @@
 ---
 name: pmm-dump
 description: "Dump PMM memory state as ASCII art in the terminal. Three depth levels: status (heatmap only), summary (heatmap + clusters + timeline), detailed (full ASCII). Use when the user runs /pmm-dump or asks for a text-based memory overview."
+argument-hint: "[status|summary|detailed]"
 ---
 
 # PMM Dump
 
 Render PMM memory state as inline ASCII visualizations. No dependencies, no browser — pure terminal output.
 
+**Depth level:** $ARGUMENTS (default: `status` if empty or not provided)
+
 ## Invocation
 
-- `/pmm-dump` — heatmap only (status level)
+- `/pmm-dump` or `/pmm-dump status` — heatmap only (status level)
 - `/pmm-dump summary` — heatmap + cluster list + last 5 timeline entries
 - `/pmm-dump detailed` — full ASCII: graph map + heatmap + similarity matrix + clusters
 
