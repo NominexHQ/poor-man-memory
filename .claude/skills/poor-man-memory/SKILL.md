@@ -362,6 +362,17 @@ When invoked:
 
 This command is implemented as a separate skill at `.claude/skills/pmm-settings/SKILL.md`.
 
+### /pmm-viz
+
+Renders PMM memory state as inline ASCII visualizations. Three views available:
+
+- `/pmm-viz` — all three visualizations
+- `/pmm-viz graph` — relationship map from graph.md
+- `/pmm-viz heatmap` — file activity heatmap from git log
+- `/pmm-viz vectors` — similarity matrix and clusters from vectors.md
+
+This command is implemented as a separate skill at `.claude/skills/pmm-viz/SKILL.md`.
+
 ## Reference Files
 
 - `references/templates.md` — initial content templates for all memory files
