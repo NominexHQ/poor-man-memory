@@ -62,6 +62,7 @@ Run `/pmm-settings` at any time to change these.
 - graph.md: active
 - vectors.md: active
 - taxonomies.md: active
+- voices.md: active
 - standinginstructions.md: active
 ```
 
@@ -87,6 +88,7 @@ At session start, dispatch an agent to read all files and return a structured su
 @memory/vectors.md
 @memory/decisions.md
 @memory/taxonomies.md
+@memory/voices.md
 @memory/memory.md
 @memory/assets.md
 @memory/preferences.md
@@ -441,4 +443,39 @@ Use formats from references/vector-syntax.md.
 | Entity | Model | Dimensions | Location | Date | Notes |
 |---|---|---|---|---|---|
 | | | | | | |
+```
+
+---
+
+## voices.md
+
+```markdown
+# Voices
+
+Tone profiles and internal reasoning patterns.
+Living document — update when new voices are defined or existing ones refined.
+
+Use formats from references/voice-syntax.md.
+
+## Tone Profiles
+
+Named voices that control how Claude communicates. Switch based on context or explicit instruction.
+
+### [Voice Name]
+*Use when: [context trigger]*
+*Traits: [2-3 defining characteristics]*
+*Example: [one sentence in this voice]*
+
+<!-- Add tone profiles here -->
+
+## Internal Dialogue
+
+Reasoning lenses Claude applies when making decisions. Not output personas — thinking tools.
+
+### [Lens Name]
+*Role: [what this lens does]*
+*Asks: [the key question this lens raises]*
+*Use when: [when to activate this lens]*
+
+<!-- Add reasoning lenses here -->
 ```
