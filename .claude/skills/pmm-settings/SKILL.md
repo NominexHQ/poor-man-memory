@@ -23,7 +23,7 @@ Read `memory/config.md` and display the current settings to the user as a summar
 > - Window size: [current preset or custom]
 > - Verbosity: [current]
 > - Maintain agent model: [current]
-> - Active files: [count] of 15 active
+> - Active files: [count] of 14 active
 > - Deactivated: [list, or "none"]
 
 ### Step 2 — Present preference prompts
@@ -61,7 +61,7 @@ Use `AskUserQuestion` to present the same 6 questions from Phase 1 of the main s
 *Note: Session-start and recall agents always use your current model.*
 
 **Q6: Active files** — Which memory files to activate? (multi-select, config.md and BOOTSTRAP.md always active)
-- memory.md, assets.md, decisions.md, processes.md, preferences.md, lessons.md, timeline.md, summaries.md, progress.md, last.md, graph.md, vectors.md, taxonomies.md, voices.md, standinginstructions.md
+- memory.md, assets.md, decisions.md, processes.md, preferences.md, voices.md, lessons.md, timeline.md, summaries.md, progress.md, last.md, graph.md, vectors.md, taxonomies.md, standinginstructions.md
 
 ### Step 3 — Write updated config
 
