@@ -228,7 +228,7 @@ Replace `<skill-base>` with the actual skill base directory path.
 > | `assets.md` | New entity introduced (person, tool, system) |
 > | `decisions.md` | Decision made and committed to |
 > | `processes.md` | New process established or existing one updated |
-> | `preferences.md` | User preference observed or stated |
+> | `preferences.md` | User preference observed or stated, or user communication pattern noticed (vocabulary, decision style, request framing) |
 > | `voices.md` | New tone profile defined, internal dialogue pattern established or refined |
 > | `lessons.md` | Mistake made or lesson explicitly noted |
 > | `timeline.md` | Major milestone or event worth preserving |
