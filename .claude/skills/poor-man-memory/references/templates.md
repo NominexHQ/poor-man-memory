@@ -45,6 +45,22 @@ Run `/pmm-settings` at any time to change these.
 <!-- Options: haiku (default, cheapest) | sonnet (balanced) | opus (most capable) -->
 <!-- Session-start and recall agents always use the parent model -->
 
+## Repository Visibility
+
+<!-- Is this repository public or private? Controls PII handling in memory files. -->
+- Visibility: public
+<!-- Options: public | private -->
+<!-- public: maintain agent avoids personal emails, uses handles over full names, summarises sensitive decisions without verbatim internal detail -->
+<!-- private: no PII restrictions, full fidelity in all files -->
+
+## Push Behaviour
+
+<!-- Should memory commits be automatically pushed to the remote? -->
+- Auto-push: off
+<!-- Options: off (default) | on -->
+<!-- off: commits stay local — push manually when ready -->
+<!-- on: git push runs after every memory commit (failures are reported, not swallowed) -->
+
 ## Active Files
 
 <!-- Which memory files are active. Deactivated files are not created or loaded. -->
@@ -71,6 +87,11 @@ Run `/pmm-settings` at any time to change these.
 <!-- These are local-only — gitignored and excluded from all memory operations -->
 - secrets.md: protected
 <!-- secrets.md stores API keys, tokens, and credentials — gitignored, machine-local -->
+- secrets_git: never
+<!-- secrets_git options: never (default) | allow-with-warning -->
+<!-- never: pre-commit hook blocks any commit containing memory/secrets.md -->
+<!-- allow-with-warning: hook warns but does not block. Only use if you understand the implications: -->
+<!--   secrets.md contents will be in git history and pushed to your remote — irreversible for public repos -->
 ```
 
 ---

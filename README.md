@@ -189,6 +189,26 @@ Every memory update is committed to git. Sliding window files (timeline, summari
 - Rollback to any point
 - Free hosting on GitHub
 
+## Security
+
+Memory files accumulate personal information, internal decisions, behavioral preferences, and project context over time. Be aware of what you're committing.
+
+**Public repositories:** If your repo is public, everything in `memory/` is readable by anyone. PMM's `visibility` setting (default: `public`) instructs the maintain agent to avoid writing personal email addresses, use handles instead of full names, and summarise sensitive decisions without verbatim internal detail. This is an LLM-enforced guideline — not a code-level guarantee. For strong privacy guarantees, use a private repository.
+
+**secrets.md:** API keys, tokens, and credentials belong in `memory/secrets.md`, which is gitignored and excluded from all memory operations by default. A pre-commit hook blocks any commit that includes `secrets.md`. To override, set `secrets_git: allow-with-warning` in `memory/config.md` — but note that committed secrets are permanent in git history and cannot be truly erased from public remotes.
+
+**Pre-commit hook:** Installed automatically during `init memory` and reinstalled on `/pmm-update`. It:
+- Blocks commits containing `memory/secrets.md` (unless `secrets_git: allow-with-warning`)
+- Scans staged memory files for personal email addresses and common secret patterns (API key prefixes, tokens)
+- Reports file and line number for any match found
+
+**Push behaviour:** Memory commits are local-only by default (`Auto-push: off`). Enable auto-push in `/pmm-settings` if you want commits pushed immediately — push failures are reported, not silently swallowed.
+
+**Recommendations:**
+- Use a **private repository** if memory files will contain sensitive business context
+- Review `memory/` contents periodically with `/pmm-query in assets` and `/pmm-query in preferences`
+- Run `/pmm-status` to check for any file health warnings
+
 ## Architecture
 
 Memory operations run in **agents** (subprocesses), never in the main context window. This keeps your conversation clean — agents handle file I/O, and the main context commits to git.
