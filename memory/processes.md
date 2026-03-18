@@ -37,6 +37,13 @@ After editing files in `.claude/skills/`, the changes are copied to `poor-man-me
 - `memory: <what>` — for memory file updates
 - `feat:` / `fix:` / `docs:` — for skill/code changes
 
+## Phase 3 Maintain Dispatch Strategy
+*Established: 2026-03-18*
+
+Configurable maintain strategy in config.md (Strategy: single | tiered):
+- **Single** (default): One agent updates all 15 memory files sequentially. Minimal overhead, correct for typical installs. Better token/message economy.
+- **Tiered** (opt-in): Three concurrent agents grouped by file dependency. Tier 1 (event files: last, timeline, summaries, progress) + Tier 2 (content files: decisions, lessons, preferences, memory, processes, voices, assets, instructions) run in parallel. Tier 3 (relational files: graph, vectors, taxonomies) runs after both tiers complete, reading updated state. Faster for large installations but higher per-save token cost. Dispatch strategy set via /pmm-settings Q8 at any time.
+
 ## /pmm-query Query Pattern
 *Established: 2026-03-18*
 

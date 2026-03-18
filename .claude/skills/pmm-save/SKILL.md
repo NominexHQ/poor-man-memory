@@ -31,5 +31,5 @@ Lightweight trigger for Phase 3 (Maintain) of Poor Man's Memory. Captures curren
 
 - This skill is a shortcut — it does exactly what Phase 3 does, but with an explicit trigger
 - The "What changed" block should summarise everything notable since the last memory save (check `memory/last.md` for the last recorded state)
-- If nothing has changed since the last save, skip the agent dispatch and say "Nothing new to save"
+- Do NOT attempt an early-exit "nothing to save" check — the comparison is unreliable when memory wasn't loaded at session start (bootstrap not wired, or lazy session-start with stale context). A no-op haiku dispatch costs ~$0.006 and is far cheaper than a missed save. Always dispatch.
 - Compatible with `/loop` for recurring saves: `/loop 5m /pmm-save`

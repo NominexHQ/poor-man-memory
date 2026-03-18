@@ -10,6 +10,9 @@ Sliding window — keep only the 10 most recent summaries. Older summaries live 
 
 ---
 
+### 2026-03-18 — v1.4.0 Token/Message Overhead Reduction shipped
+Shipped v1.4.0 with four token/message overhead optimizations: (1) Bootstrap Check cache via `bootstrap_wired` flag eliminates CLAUDE.md file reads once wiring confirmed, saving repeated file I/O across all 6 skills; (2) Pre-check agent removed, template-only detection moved to main context Read tool calls that strip blanks/comments and count content lines, saving 1 agent per save; (3) Phase 5 batch hydration consolidates multiple template-only targets into single agent dispatch + commit, saving up to 14 agents when populating many files; (4) Configurable maintain strategy (single vs tiered) lets users choose between minimal overhead (default) and faster parallel execution (opt-in). PR #28 merged with review from raffi-ismail confirming sound logic. First run of new single-agent path successful.
+
 ### 2026-03-18 — Bootstrap Check and v1.3.1 release
 Implemented Bootstrap Check reminder system to prevent memory auto-load failures when @memory/BOOTSTRAP.md wiring is missing from CLAUDE.md. Added reusable utility across all 6 PMM surfaces (init, /pmm-save, /pmm-hydrate, /pmm-update, /pmm-status, /pmm-query) with three-option user prompt: fix now (auto-wires and commits), remind later, or suppress. Updated BOOTSTRAP.md template, added bootstrap_reminder config flag, and updated README. PR #20 merged and v1.3.1 released to GitHub with Bootstrap Check feature.
 

@@ -18,7 +18,7 @@ Render PMM memory state as inline ASCII visualizations. Runs as a subagent to ke
 
 ## Behaviour
 
-Dispatch a `general-purpose` agent with the prompt below. Replace `<level>` with the depth level (`status`, `summary`, or `detailed`). Replace `<project-root>` with the actual project root path.
+Dispatch a `general-purpose` agent using the `Readonly Agent Model` from `memory/config.md` (default: `haiku`) with the prompt below. Replace `<level>` with the depth level (`status`, `summary`, or `detailed`). Replace `<project-root>` with the actual project root path.
 
 Output the agent's returned string verbatim — it contains the fully formatted ASCII visualization.
 

@@ -134,7 +134,7 @@ Track changes — note when a taxonomy evolves so historical references remain i
 
 ### Configuration Options
 *Purpose: allowed values and defaults for config.md settings*
-*Last updated: 2026-03-17*
+*Last updated: 2026-03-18*
 
 | Setting | Allowed Values | Default | Notes |
 |---|---|---|---|
@@ -145,6 +145,8 @@ Track changes — note when a taxonomy evolves so historical references remain i
 | Verbosity | silent, summary, verbose | silent | Standing instruction prefers silent |
 | Maintain Agent Model | haiku, sonnet, opus | haiku | Session-start/recall use parent model |
 | Active Files | Multi-select from all 15 files | All active | config.md and BOOTSTRAP.md always active |
+| Maintain Strategy | single, tiered | single | v1.4.0: single is default (1 agent, minimal overhead); tiered is opt-in (3-agent parallel, faster but higher cost). Changed via /pmm-settings Q8. |
+| Bootstrap Wired | false, true | false | v1.4.0: false = new install, Bootstrap Check reads CLAUDE.md; true = wiring confirmed, check skips file reads. Auto-set to true after "Fix it now" or manual wiring. |
 
 ### GitHub Identity Scheme
 *Purpose: role-based commit authors for this project*
@@ -155,12 +157,31 @@ Track changes — note when a taxonomy evolves so historical references remain i
 | Raffi (raffi-ismail) | raffi-ismail@users.noreply.github.com | Admin, reviewer, creator | PR review, merges, admin operations | All (private and public) |
 | Leith (leith-dev) | leith-dev@users.noreply.github.com | Public-facing author | Feature commits, PRs | NominexHQ repos |
 
-### Phase 3 Maintain Dispatch Patterns
-*Purpose: concurrency strategies for Phase 3 memory maintenance*
+### Phase 3 Maintain Strategies
+*Purpose: dispatch strategy selection for Phase 3 memory maintenance*
+*Last updated: 2026-03-18*
+
+| Strategy | Default | Execution Model | Dispatch | Token Cost | When to Use |
+|---|---|---|---|---|---|
+| Single | Yes | 1 agent updates all 15 files sequentially | 1 agent total, reads all files, writes all files in single pass | Minimal (~10-20k tokens per save) | Typical installs, token budget constrained, minimal overhead is priority |
+| Tiered | No (opt-in) | 3 concurrent agents by file dependency — Tier 1+2 parallel, Tier 3 after | 3 agents concurrent (Tier 1+2) + 1 sequential (Tier 3) = 4 concurrent calls, but only 3 active at once | Higher (~15-25k+ tokens per save) | Large installs with many files, performance is priority over token economy, parallel execution desired |
+
+### Phase 3 Maintain Dispatch Patterns (v1.3.3+)
+*Purpose: concurrency patterns for Phase 3 memory maintenance*
 *Last updated: 2026-03-18*
 
 | Pattern | Trigger | Execution Model | Use Case |
 |---|---|---|---|
-| Tier-based Dispatch | Standard Phase 3 maintenance | Tier 1+2 parallel, Tier 3 sequential after | Multi-file updates requiring safe ordering |
-| Concurrent Pre-check | Before Tier-based Dispatch | Single read-only agent | Check all files for template-only status before dispatch |
-| Sequential Fallback | Large or sensitive updates | Linear agent execution | When parallelism overhead exceeds benefit |
+| Tier-based Dispatch | Maintain Strategy: tiered (opt-in) | Tier 1+2 parallel (4 event + 8 content files each), Tier 3 sequential after (3 relational files) | Multi-file updates where parallelism benefit exceeds agent dispatch overhead |
+| Concurrent Pre-check | Before any Tier-based Dispatch (or Single dispatch) | Single read-only agent, reads all active files, counts content lines | Detect template-only files before maintaining to trigger proactive hydration |
+| Single Sequential | Maintain Strategy: single (default) | 1 agent reads config, then updates all 15 files sequentially in single dispatch | Minimise agent overhead, suitable for most installs, best token economy |
+
+### Bootstrap Check Cache Strategy
+*Purpose: optimization for Bootstrap Check initialization across 6 PMM skills*
+*Last updated: 2026-03-18*
+
+| Phase | Flag State | Behaviour | File I/O |
+|---|---|---|---|
+| First run (new install) | `bootstrap_wired: false` (default in template) | Bootstrap Check reads CLAUDE.md to detect wiring; if missing, prompts user; user selects "Fix it now" or other option | 1 file read per check invocation |
+| After fix or auto-wire | `bootstrap_wired: true` (set by Fix It Now step) | Bootstrap Check skips CLAUDE.md read entirely; assumes wiring is confirmed and valid | 0 file reads; cache bypass |
+| Subsequent sessions | `bootstrap_wired: true` (persists in config.md) | All 6 PMM skills skip Bootstrap Check file read; cache remains valid | Eliminated across all invocations |

@@ -13,7 +13,7 @@ Quick health dashboard for Poor Man's Memory. Runs as a subagent to keep the mai
 
 ## Behaviour
 
-Dispatch a `general-purpose` agent with the prompt below. Replace `<project-root>` with the actual project root path.
+Dispatch a `general-purpose` agent using the `Readonly Agent Model` from `memory/config.md` (default: `haiku`) with the prompt below. Replace `<project-root>` with the actual project root path.
 
 Output the agent's returned string verbatim — it contains the fully formatted dashboard.
 

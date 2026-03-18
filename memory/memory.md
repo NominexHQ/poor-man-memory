@@ -17,14 +17,17 @@ The project being worked on IS the poor-man-memory skill itself. The user is act
 - 5 operational phases: Init, Session Start, Maintain, Recall, Hydrate
 - 7 skills: poor-man-memory (main), pmm-settings (config), pmm-dump (ASCII viz), pmm-viz (interactive D3.js), pmm-update (upstream sync), pmm-query (explicit recall), pmm-hydrate (explicit hydration)
 - 4 reference files: graph-syntax.md, vector-syntax.md, voice-syntax.md, templates.md
-- Bootstrap Check utility prevents memory auto-load failures by detecting missing @memory/BOOTSTRAP.md wiring in CLAUDE.md (v1.3.1)
+- Bootstrap Check utility prevents memory auto-load failures by detecting missing @memory/BOOTSTRAP.md wiring in CLAUDE.md (v1.3.1); cache flag `bootstrap_wired` eliminates file reads once wired (v1.4.0)
 - All memory operations are dispatched via agents (subprocesses), not run in main context
 - Agents edit files only — main context handles all git commits
-- config.md controls phase behaviour: save cadence, commit behaviour, window sizes, verbosity, active file list
-- GitHub repo: https://github.com/NominexHQ/poor-man-memory (v1.0 shipped 2026-03-16)
+- config.md controls phase behaviour: save cadence, commit behaviour, window sizes, verbosity, active file list, maintain strategy (single or tiered)
+- GitHub repo: https://github.com/NominexHQ/poor-man-memory (v1.0 shipped 2026-03-16, v1.4.0 shipped 2026-03-18 with overhead reduction)
 - Repository is structured as clone-and-go — not drop-in skill files
 - `pmm/` directory at project root contains user-inspectable artifacts: D3.js library, HTML template, version manifest
 - Interactive D3.js visualization: force-directed graph with type-colored nodes, search filters, time slider with git commits, cluster convex hulls
+- Phase 3 Maintain supports configurable dispatch strategies: single (default, 1 agent, minimal overhead) and tiered (opt-in, 3-agent concurrent, faster for large installs)
+- Phase 5 Hydrate uses batch dispatch: single-file mode (1 agent per target) and batch mode (1 agent for multiple targets, consolidates I/O)
+- Template-only file detection moved from dedicated agent to main context Read calls (v1.4.0 optimization)
 
 ## Token Economics
 
