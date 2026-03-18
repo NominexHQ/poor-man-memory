@@ -13,7 +13,7 @@ Run `/pmm-settings` at any time to change these.
 ## Commit Behaviour
 
 <!-- When changes are committed to git -->
-- Mode: auto-commit
+- Mode: session-end
 <!-- Options: auto-commit | session-end | manual -->
 
 ## Push Behaviour
@@ -75,7 +75,7 @@ Run `/pmm-settings` at any time to change these.
 ## Readonly Agent Model
 
 <!-- Which model handles read-only agents (session-start, recall, pmm-query, pmm-dump, pmm-status, pmm-viz) -->
-- Readonly model: haiku
+- Readonly model: sonnet
 <!-- Options: haiku (default) | sonnet | opus | inherit -->
 <!-- haiku: cheapest for read-only work — ~95% cheaper than Opus, ~73% cheaper than Sonnet -->
 <!-- inherit: use the parent model (pre-v1.5.0 behaviour) -->
