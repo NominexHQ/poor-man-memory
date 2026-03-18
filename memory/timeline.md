@@ -63,3 +63,7 @@ Append-only — entries go in chronological order.
 **2026-03-18** — User chose "Fix it now" at Bootstrap Check prompt after /pmm-save [user:raffi]
 **2026-03-18** — BOOTSTRAP.md wired into CLAUDE.md under `## Memory` section; committed: "pmm: wire BOOTSTRAP.md into CLAUDE.md for auto-load" [system:process]
 **2026-03-18** — Memory auto-load now active for nominex-pmm project; subsequent session starts will auto-recall @memory/BOOTSTRAP.md [system:process]
+**2026-03-18** — Fixed Bash permission rule wildcard pattern in nominex-pmm and poor-man-memory-repo templates: `Bash(git commit -m 'memory:*')` → `Bash(git commit -m *)`. Quoted string with `*` inside triggered validation error on startup. [agent:leith]
+**2026-03-18** — PR #21 created under wrong GitHub account (raffi-ismail); closed and recreated as PR #22 under leith-dev account. Approved and merged by raffi-ismail (second repeat of PR #12 account mix-up). [agent:leith]
+**2026-03-18** — poor-man-memory-repo local clone pulled to latest: 8ed9425 → e0b35b5 (33 commits behind after merges resolved). [system:process]
+**2026-03-18** — Version bumped to v1.3.2 in pmm/version.json; PR #23 created, reviewed, and merged; v1.3.2 GitHub release published. [system:process]

@@ -71,8 +71,11 @@ v1.3.1 released on GitHub. Repository is live at https://github.com/NominexHQ/po
 
 ## Next
 
+- Fix SKILL.md documentation to reference corrected Bash permission rule syntax (remove old broken example)
+- Implement notification framework for targeted /pmm-update announcements (for critical non-auto-apply fixes)
 - Implement secrets.md feature with gitignore and maintain agent access control
-- Further dog-fooding across real projects with /pmm-query
-- Community feedback on v1.3 and v1.4 (upcoming features)
+- Add pre-PR checklist for GitHub account identity verification (prevent PR #12/#21/#?? repeat)
 - Evaluate Phase 4 (Recall) vs /pmm-query interaction and user preferences
+- Further dog-fooding across real projects with /pmm-query
+- Community feedback on v1.3.2 release and feedback from wildcard fix distribution
 - Extended use on nominex-pmm repository itself for self-referential memory iteration

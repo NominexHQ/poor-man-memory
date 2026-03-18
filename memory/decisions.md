@@ -111,3 +111,11 @@ Ratified by: user
 **2026-03-16 — Use agents (subprocesses) for all memory operations**
 Context: Main context window was getting polluted with file I/O and git ops during memory phases. Dispatching agents keeps the main window clean — agents do the heavy lifting and return concise results.
 Ratified by: user
+
+**2026-03-18 — Wildcards in permission rules must NOT be inside quoted strings** [agent:leith]
+Context: Permission rule `Bash(git commit -m 'memory:*')` failed validation because `*` was quoted. Correct form: `Bash(git commit -m *)`. Validation error was silent, rule skipped at startup. Applied fix to both active project .claude/settings.json and poor-man-memory-repo template.
+Ratified by: consensus
+
+**2026-03-18 — Retain settings.json in merge category for /pmm-update (not auto-apply)** [agent:leith]
+Context: Bash wildcard fix is in .claude/settings.json, which has category `merge` in version.json. This prevents /pmm-update from auto-applying it to existing installs (risky to auto-merge settings files). Fix will require manual update or user confirmation during /pmm-update. Trade-off accepted: safety (no surprise setting changes) over convenience (auto-apply fix).
+Ratified by: consensus

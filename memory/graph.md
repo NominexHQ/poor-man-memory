@@ -140,3 +140,20 @@ Use typed relationships from references/graph-syntax.md.
 [[Bootstrap Check]] → integrated-in → [[/pmm-update]]
 [[Bootstrap Check]] → integrated-in → [[/pmm-status]]
 [[Bootstrap Check]] → integrated-in → [[/pmm-query]]
+
+## Bash Permission Rules
+[[Bash permission rules]] → use → [[shell wildcards]]
+[[Bash(git commit -m *)]] → correct-pattern → [[Permission rule syntax]]
+[[Bash(git commit -m 'memory:*')]] → violates → [[Permission rule syntax]]
+[[.claude/settings.json]] → contains → [[Bash permission rules]]
+[[poor-man-memory-repo template]] → contains → [[Bash permission rules]]
+[[Wildcard validation]] → checks-at → [[Claude Code startup]]
+
+## GitHub Account Management
+[[Leith]] → identity → [[leith-dev]]
+[[Raffi]] → identity → [[raffi-ismail]]
+[[PR workflow]] → requires → [[Correct GitHub account]]
+[[gh pr create]] → must-use → [[leith-dev authentication]]
+[[PR #21]] → violates → [[PR account workflow]]
+[[PR #22]] → replaces → [[PR #21]]
+[[version.json]] → categorizes → [[.claude/settings.json]] <!-- as merge, not auto-apply -->
