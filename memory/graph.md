@@ -158,7 +158,7 @@ Use typed relationships from references/graph-syntax.md.
 [[PR #22]] → replaces → [[PR #21]]
 [[version.json]] → categorizes → [[.claude/settings.json]] <!-- as merge, not auto-apply -->
 
-## Phase 3 Maintain — Concurrent Sub-agents
+## Phase 3 Maintain — Concurrent Sub-agents & Strategies
 [[Concurrent Sub-agent Dispatch]] → feature-of → [[v1.3.3]]
 [[Tier-based Dispatch]] → implements → [[Concurrent Sub-agent Dispatch]]
 [[Tier 1+2 Agents]] → execute-in-parallel → [[Tier-based Dispatch]]
@@ -168,4 +168,29 @@ Use typed relationships from references/graph-syntax.md.
 [[Concurrent Pre-check]] → part-of → [[Concurrent Sub-agent Dispatch]]
 [[Concurrent Pre-check]] → single-read-only-agent → [[Template Status Check]]
 [[v1.3.3]] → contains → [[Concurrent Sub-agent Dispatch]]
+[[Maintain Strategy]] → feature-of → [[v1.4.0]]
+[[Single Maintain]] → implements → [[Maintain Strategy]] <!-- default: 1 agent for all files -->
+[[Tiered Maintain]] → implements → [[Maintain Strategy]] <!-- opt-in: 3-agent tier dispatch -->
+[[Single Maintain]] → minimises → [[Token/Message Overhead]]
+[[Tiered Maintain]] → maximises → [[Maintain Performance]]
+[[Maintain Strategy]] → configurable-in → [[config.md]]
+[[/pmm-settings Q8]] → controls → [[Maintain Strategy]]
 [[GitHub Account Lesson]] → pattern → [[PR #24, #26 under raffi-ismail]] <!-- 4th recurrence of account mix-up -->
+
+## v1.4.0 Token/Message Overhead Reduction
+[[v1.4.0]] → ships-with → [[Bootstrap Check Cache]]
+[[v1.4.0]] → ships-with → [[Pre-check Agent Removal]]
+[[v1.4.0]] → ships-with → [[Batch Hydration]]
+[[v1.4.0]] → ships-with → [[Configurable Maintain Strategy]]
+[[bootstrap_wired flag]] → part-of → [[Bootstrap Check Cache]]
+[[bootstrap_wired flag]] → stored-in → [[config.md]]
+[[Bootstrap Check Cache]] → skips → [[CLAUDE.md file read]] <!-- once bootstrap_wired: true -->
+[[Pre-check Agent Removal]] → moves → [[Template-only Detection]]
+[[Pre-check Agent Removal]] → moves-to → [[Main Context Read Calls]]
+[[Main Context Read Calls]] → counts → [[Content Lines per File]] <!-- strips blanks/comments -->
+[[Batch Hydration]] → dispatches-in-modes → [[Single-file Hydration]]
+[[Batch Hydration]] → dispatches-in-modes → [[Batch Hydration Mode]]
+[[Single-file Hydration]] → uses → [[1 agent per target]]
+[[Batch Hydration Mode]] → uses → [[1 agent for multiple targets]]
+[[Batch Hydration Mode]] → consolidates → [[File I/O]] <!-- reads all populated files once -->
+[[PR #28]] → ships → [[v1.4.0]]

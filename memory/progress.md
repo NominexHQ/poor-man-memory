@@ -3,7 +3,7 @@
 Current state, milestones, and what's next.
 Updated whenever state changes meaningfully.
 
-v1.3.3 released on GitHub. Repository is live at https://github.com/NominexHQ/poor-man-memory as a clone-and-go project. All 17 memory files implemented. 5 phases operational (Init, Session Start, Maintain, Recall, Hydrate). 7 skills built (poor-man-memory, pmm-settings, pmm-dump, pmm-viz, pmm-update, pmm-query, pmm-hydrate). Interactive D3.js visualization with time slider. Bootstrap Check reminder system prevents memory auto-load failures. Phase 3 Maintain now uses tier-based concurrent sub-agent dispatch. System stable and undergoing dog-fooding.
+v1.4.0 released on GitHub with token/message overhead reduction. Repository is live at https://github.com/NominexHQ/poor-man-memory as a clone-and-go project. All 17 memory files implemented. 5 phases operational (Init, Session Start, Maintain, Recall, Hydrate). 7 skills built (poor-man-memory, pmm-settings, pmm-dump, pmm-viz, pmm-update, pmm-query, pmm-hydrate). Interactive D3.js visualization with time slider. Bootstrap Check reminder system prevents memory auto-load failures. Phase 3 Maintain supports configurable strategies: single (default, 1 agent) and tiered (opt-in, 3-agent tier dispatch). Phase 5 Hydrate uses batch mode to consolidate multiple file targets. Pre-check agent eliminated — template-only detection in main context. System stable and undergoing dog-fooding.
 
 ## Completed
 
@@ -39,6 +39,12 @@ v1.3.3 released on GitHub. Repository is live at https://github.com/NominexHQ/po
 - Added argument-hint frontmatter and $ARGUMENTS variable for skill argument passing
 - Implemented firstSeen/lastSeen temporal tracking per node/edge for D3.js time slider
 - PR #10 merged to main
+- Bootstrap Check cache (`bootstrap_wired` flag) eliminates CLAUDE.md reads post-wiring
+- Pre-check agent removed — template-only detection moved to main context Read tool calls
+- Batch hydration for Phase 5: single-file vs batch dispatch modes consolidate file I/O
+- Configurable maintain strategy: `single` (default) and `tiered` (opt-in)
+- v1.4.0 released with token/message overhead reduction
+- PR #28 merged to main (6c65e96)
 
 ## In Progress
 

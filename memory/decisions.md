@@ -120,6 +120,22 @@ Ratified by: consensus
 Context: Bash wildcard fix is in .claude/settings.json, which has category `merge` in version.json. This prevents /pmm-update from auto-applying it to existing installs (risky to auto-merge settings files). Fix will require manual update or user confirmation during /pmm-update. Trade-off accepted: safety (no surprise setting changes) over convenience (auto-apply fix).
 Ratified by: consensus
 
+**2026-03-18 — Configurable maintain strategy: single (default) or tiered** [user:raffi]
+Context: v1.4.0 replaces fixed tier-based dispatch with configurable `Strategy` in config.md. Default is `single` (1 agent, all files, minimal overhead — correct for typical use). Optional `tiered` mode (3-agent tier dispatch, faster for large installations but higher per-save cost). Q8 in /pmm-settings lets users choose at any time.
+Ratified by: user
+
+**2026-03-18 — Batch hydration for Phase 5 with smart dispatch**
+Context: Phase 5 Hydrate now detects single-file (1 target) vs batch (2+ targets). Single-file dispatches 1 agent per target with separate commit per file. Batch mode dispatches ONE agent reading all populated files once, writing all template-only targets in single commit. Saves up to 14 agent dispatches and consolidates file I/O. Both /pmm-save and /pmm-hydrate updated to use batch mode when possible.
+Ratified by: consensus
+
+**2026-03-18 — Eliminate dedicated pre-check agent in Phase 5**
+Context: Template-only detection (checking if file is empty structure vs fully populated) moved from a dedicated read-only agent to main context Read tool calls. Main context reads each active file directly, strips blanks/headings/comments, counts content lines. Saves 1 agent dispatch per /pmm-save. Trade-off: main context stays cleaner but pre-check logic lives in SKILL.md rather than isolated agent.
+Ratified by: consensus
+
+**2026-03-18 — Bootstrap Check cache via `bootstrap_wired` flag**
+Context: Bootstrap Check was re-reading CLAUDE.md on every invocation across all 6 PMM skills to detect if @memory/BOOTSTRAP.md was wired. Once wired is confirmed (during step 2 wiring or after "Fix it now"), set `bootstrap_wired: true` in config.md. Bootstrap Check then skips file reads entirely. New installs default `bootstrap_wired: false` in templates. Eliminates repeated CLAUDE.md read once wired.
+Ratified by: consensus
+
 **2026-03-18 — Tier-based concurrent sub-agents for Phase 3 Maintain** [user:raffi]
 Context: Single maintain agent handling all 15 files sequentially is slow. Replacing with a three-tier concurrent dispatch: Tier 1 (event files: last.md, timeline.md, summaries.md, progress.md) and Tier 2 (content files: decisions.md, lessons.md, preferences.md, memory.md, processes.md, voices.md, assets.md, standinginstructions.md) run in parallel. Tier 3 (relational files: graph.md, vectors.md, taxonomies.md) runs after both complete, reading updated file state from Tier 1+2. Template-only pre-check also moved to a single concurrent read-only agent rather than sequential per-file checks.
 Ratified by: user
