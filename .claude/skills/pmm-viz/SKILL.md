@@ -19,7 +19,7 @@ Generates an interactive D3.js force-directed graph from all memory files and op
 
 ## Behaviour
 
-When invoked, dispatch a `general-purpose` agent with the prompt below. Replace `<scope>` with the subcommand (`full`, `graph`, `clusters`, or `timeline`). Replace `<project-root>` with the actual project root path.
+When invoked, dispatch a `general-purpose` agent using the `Readonly Agent Model` from `memory/config.md` (default: `haiku`) with the prompt below. Replace `<scope>` with the subcommand (`full`, `graph`, `clusters`, or `timeline`). Replace `<project-root>` with the actual project root path.
 
 ### Agent Prompt
 

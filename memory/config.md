@@ -72,6 +72,22 @@ Run `/pmm-settings` at any time to change these.
 - taxonomies.md: active
 - standinginstructions.md: active
 
+## Readonly Agent Model
+
+<!-- Which model handles read-only agents (session-start, recall, pmm-query, pmm-dump, pmm-status, pmm-viz) -->
+- Readonly model: haiku
+<!-- Options: haiku (default) | sonnet | opus | inherit -->
+<!-- haiku: cheapest for read-only work — ~95% cheaper than Opus, ~73% cheaper than Sonnet -->
+<!-- inherit: use the parent model (pre-v1.5.0 behaviour) -->
+
+## Session Start
+
+<!-- Whether to dispatch a Phase 2 agent at session start -->
+- Mode: lazy
+<!-- Options: lazy (default) | eager -->
+<!-- lazy: skip Phase 2 agent — memory files already in context via @memory/BOOTSTRAP.md @-imports. Requires bootstrap_wired: true. Falls through to eager if bootstrap_wired is false. -->
+<!-- eager: always dispatch Phase 2 agent to read and synthesise all memory files -->
+
 ## Maintain Strategy
 
 <!-- How the maintain phase dispatches agents — controls agent count per /pmm-save -->

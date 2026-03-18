@@ -13,7 +13,7 @@ A lightweight, git-backed structured memory system for Claude Code. No infrastru
 
 Use the `general-purpose` agent type for all memory operations. Agents have access to Read, Write, Edit, Glob, and Grep tools.
 
-**Model selection:** The maintain agent uses the model specified in `config.md` (default: `haiku`). Session-start and recall agents inherit the parent model since they need higher fidelity for summarisation and search. When dispatching the maintain agent, pass the `model` parameter from config.
+**Model selection:** The maintain agent uses the `Maintain Agent Model` from `config.md` (default: `haiku`). Session-start, recall, and all other read-only agents use the `Readonly Agent Model` from `config.md` (default: `haiku`). When dispatching any agent, pass the appropriate `model` parameter from config.
 
 **Agents do NOT run git commands.** After any agent that writes files, the main context handles the commit:
 
@@ -157,7 +157,11 @@ Replace `<skill-base>` with the actual skill base directory path.
 
 **When:** Start of a session, or when the user asks to recall/review memory.
 
-**Dispatch:** Launch a `general-purpose` agent with this prompt:
+**Dispatch:** Read `memory/config.md` for `Session Start` mode (default: `lazy`) and `bootstrap_wired` status.
+
+**If `Mode: lazy` AND `bootstrap_wired: true`** — skip agent dispatch. Memory files are already loaded into session context via the `@memory/BOOTSTRAP.md` @-imports in `CLAUDE.md`. Absorb the file contents directly from context — no agent needed. This saves ~33k tokens per session start.
+
+**If `Mode: eager` OR `bootstrap_wired: false`** — launch a `general-purpose` agent using the `Readonly Agent Model` from config (default: `haiku`) with this prompt:
 
 > Read all memory files and return a structured summary. This is a READ-ONLY task — do not edit anything.
 >
@@ -305,7 +309,7 @@ After commit, **run the Bootstrap Check** (see `## Bootstrap Check` below).
 
 **When:** User asks about past context ("what did we decide about X", "what's my preference for Y", "what happened with Z").
 
-**Dispatch:** Launch a `general-purpose` agent with this prompt:
+**Dispatch:** Launch a `general-purpose` agent using the `Readonly Agent Model` from `memory/config.md` (default: `haiku`) with this prompt:
 
 > Search the poor-man-memory files for information about: <user's question>
 > This is a READ-ONLY task — do not edit anything.

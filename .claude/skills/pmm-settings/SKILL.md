@@ -1,6 +1,6 @@
 ---
 name: pmm-settings
-description: "Change Poor Man's Memory configuration. Re-presents preference prompts for save cadence, commit behaviour, push behaviour, sliding window size, verbosity, repository visibility, maintain agent model, secrets_git, and active files. Use when the user runs /pmm-settings or asks to change memory system settings."
+description: "Change Poor Man's Memory configuration. Re-presents preference prompts for save cadence, commit behaviour, push behaviour, sliding window size, verbosity, repository visibility, maintain agent model, maintain strategy, readonly agent model, session start mode, secrets_git, and active files. Use when the user runs /pmm-settings or asks to change memory system settings."
 ---
 
 # PMM Settings
@@ -26,6 +26,8 @@ Read `memory/config.md` and display the current settings to the user as a summar
 > - Repository visibility: [current]
 > - Maintain agent model: [current]
 > - Maintain strategy: [current]
+> - Readonly agent model: [current]
+> - Session start: [current]
 > - Secrets in git: [current]
 > - Active files: [count] of 15 active
 > - Deactivated: [list, or "none"]
@@ -70,7 +72,7 @@ Use `AskUserQuestion` to present the same questions from Phase 1 of the main ski
 - Sonnet — balanced, better at nuanced updates
 - Opus — most capable, highest cost
 
-*Note: Session-start and recall agents always use your current model.*
+*Note: Session-start and recall agents use the Readonly Agent Model (Q11 below).*
 
 **Q8: Maintain strategy** — How should memory saves dispatch agents?
 - Single (default) — all files updated in one agent dispatch per save (minimises token/message overhead, budget-friendly)
@@ -84,6 +86,20 @@ Use `AskUserQuestion` to present the same questions from Phase 1 of the main ski
 
 **Q10: Active files** — Which memory files to activate? (multi-select, config.md and BOOTSTRAP.md always active)
 - memory.md, assets.md, decisions.md, processes.md, preferences.md, voices.md, lessons.md, timeline.md, summaries.md, progress.md, last.md, graph.md, vectors.md, taxonomies.md, standinginstructions.md
+
+**Q11: Readonly agent model** — Which model should handle read-only operations (session-start, recall, pmm-query, pmm-dump, pmm-status, pmm-viz)?
+- Haiku (default) — cheapest, ~95% cheaper than Opus. Ideal for mechanical reads.
+- Sonnet — balanced, ~73% cheaper than Opus. Better at synthesis.
+- Opus — most capable, highest cost.
+- Inherit — use the parent model (pre-v1.5.0 behaviour, not recommended for Opus users)
+
+*Haiku is strongly recommended — read-only agents do simple file I/O and retrieval, not nuanced reasoning.*
+
+**Q12: Session start mode** — How should PMM load memory at session start?
+- Lazy (default) — skip Phase 2 agent; memory files are already in context via `@memory/BOOTSTRAP.md` @-imports in `CLAUDE.md`. Saves ~33k tokens per session. Requires `bootstrap_wired: true`.
+- Eager — always dispatch a Phase 2 agent to read and synthesise all memory files (pre-v1.5.0 behaviour)
+
+*Lazy mode only works when `@memory/BOOTSTRAP.md` is imported in `CLAUDE.md`. Falls back to eager if `bootstrap_wired: false`.*
 
 ### Step 3 — Write updated config
 
