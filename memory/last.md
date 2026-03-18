@@ -2,6 +2,8 @@
 
 The last few significant actions in detail.
 Always replaced — this is a window, not a log.
+<!-- Entry format: **[Date]** — [Action] [namespace:name?] -->
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 
 **2026-03-18** — Refactored /pmm-status, /pmm-dump, /pmm-update to dispatch subagents instead of main context execution
 **2026-03-18** — Added token burn estimates to /pmm-status and /pmm-dump outputs (reads: chars/4, writes: diff lines × 20 / 4)

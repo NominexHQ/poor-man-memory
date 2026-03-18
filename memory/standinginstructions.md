@@ -6,7 +6,8 @@ These take precedence over session-level instructions when there is a conflict.
 
 ## Format
 
-**[Date added] — [Instruction]**
+**[Date added] — [Instruction]** [namespace:name?]
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 Scope: [always / for X context only]
 Reason: [why this was added]
 

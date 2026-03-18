@@ -5,7 +5,8 @@ Append-only — entries go in chronological order.
 
 ## Format
 
-**[Date]** — [What happened]
+**[Date]** — [What happened] [namespace:name?]
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 
 ---
 

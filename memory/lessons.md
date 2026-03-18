@@ -5,7 +5,8 @@ Reference before making decisions in areas where past mistakes occurred.
 
 ## Format
 
-**[Date] — [Lesson]**
+**[Date] — [Lesson]** [namespace:name?]
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 What happened:
 What to do instead:
 
