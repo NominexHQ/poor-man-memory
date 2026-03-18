@@ -3,7 +3,7 @@
 Current state, milestones, and what's next.
 Updated whenever state changes meaningfully.
 
-v1.3.1 released on GitHub. Repository is live at https://github.com/NominexHQ/poor-man-memory as a clone-and-go project. All 17 memory files implemented. 5 phases operational (Init, Session Start, Maintain, Recall, Hydrate). 7 skills built (poor-man-memory, pmm-settings, pmm-dump, pmm-viz, pmm-update, pmm-query, pmm-hydrate). Interactive D3.js visualization with time slider. Bootstrap Check reminder system prevents memory auto-load failures. System stable and undergoing dog-fooding.
+v1.3.3 released on GitHub. Repository is live at https://github.com/NominexHQ/poor-man-memory as a clone-and-go project. All 17 memory files implemented. 5 phases operational (Init, Session Start, Maintain, Recall, Hydrate). 7 skills built (poor-man-memory, pmm-settings, pmm-dump, pmm-viz, pmm-update, pmm-query, pmm-hydrate). Interactive D3.js visualization with time slider. Bootstrap Check reminder system prevents memory auto-load failures. Phase 3 Maintain now uses tier-based concurrent sub-agent dispatch. System stable and undergoing dog-fooding.
 
 ## Completed
 
@@ -69,13 +69,17 @@ v1.3.1 released on GitHub. Repository is live at https://github.com/NominexHQ/po
 
 <!-- Nothing currently in progress -->
 
+- Fixed Bash permission rule wildcard pattern (v1.3.2)
+- Concurrent sub-agent tier-based dispatch for Phase 3 Maintain (v1.3.3)
+- PR #25 and #27 merged, v1.3.3 released
+
 ## Next
 
+- Add `gh auth switch --user leith-dev` as mandatory step before `gh pr create` in standinginstructions.md (account mix-up 4th repeat)
 - Fix SKILL.md documentation to reference corrected Bash permission rule syntax (remove old broken example)
 - Implement notification framework for targeted /pmm-update announcements (for critical non-auto-apply fixes)
-- Implement secrets.md feature with gitignore and maintain agent access control
-- Add pre-PR checklist for GitHub account identity verification (prevent PR #12/#21/#?? repeat)
+- Add pre-PR checklist for GitHub account identity verification (prevent repeat)
 - Evaluate Phase 4 (Recall) vs /pmm-query interaction and user preferences
 - Further dog-fooding across real projects with /pmm-query
-- Community feedback on v1.3.2 release and feedback from wildcard fix distribution
+- Community feedback on v1.3.3 release
 - Extended use on nominex-pmm repository itself for self-referential memory iteration

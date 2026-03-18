@@ -16,6 +16,7 @@ Use formats from references/vector-syntax.md.
 [[config.md]] ↔ [[preferences.md]] | score: 0.62 | basis: both store user-facing settings, but config.md is operational control (cadence, windows, active files) and preferences.md is style/workflow preferences
 [[summaries.md]] ↔ [[timeline.md]] | score: 0.80 | basis: same temporal data at different compression levels — fine-grained events vs narrative rollups
 [[preferences.md]] ↔ [[voices.md]] | score: 0.70 | basis: both about user identity — preferences captures style/workflow, voices captures communication patterns and reasoning lenses
+[[Tier-based Dispatch]] ↔ [[SKILL.md]] | score: 0.76 | basis: both are operational dispatch logic — tier-based dispatch is the Phase 3 implementation pattern, SKILL.md documents the higher-level skill semantics
 
 ## Clusters
 
@@ -26,6 +27,7 @@ Cluster: semantic-layer → [[[graph.md]], [[vectors.md]]] | theme: structural a
 Cluster: self-referential → [[[SKILL.md]], [[memory.md]], [[processes.md]]] | theme: the poor-man-memory skill is its own project — these files describe and govern themselves
 Cluster: temporal-memory → [[[timeline.md]], [[summaries.md]], [[last.md]]] | theme: three tiers of temporal resolution — fine-grained events, compressed rollups, recent window
 Cluster: operational → [[[config.md]], [[BOOTSTRAP.md]], [[standinginstructions.md]]] | theme: system behaviour controls — configuration, initialization, persistent rules
+Cluster: concurrency → [[[Tier-based Dispatch]], [[Concurrent Pre-check]], [[Tier 1+2 Agents]], [[Tier 3 Agent]]] | theme: Phase 3 Maintain parallelism patterns — dispatch strategy, pre-checks, tiered execution
 
 ## Embedding Registry
 

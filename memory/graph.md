@@ -157,3 +157,15 @@ Use typed relationships from references/graph-syntax.md.
 [[PR #21]] → violates → [[PR account workflow]]
 [[PR #22]] → replaces → [[PR #21]]
 [[version.json]] → categorizes → [[.claude/settings.json]] <!-- as merge, not auto-apply -->
+
+## Phase 3 Maintain — Concurrent Sub-agents
+[[Concurrent Sub-agent Dispatch]] → feature-of → [[v1.3.3]]
+[[Tier-based Dispatch]] → implements → [[Concurrent Sub-agent Dispatch]]
+[[Tier 1+2 Agents]] → execute-in-parallel → [[Tier-based Dispatch]]
+[[Tier 3 Agent]] → executes-after → [[Tier 1+2 Agents]]
+[[Tier-based Dispatch]] → updates → [[SKILL.md]]
+[[Tier-based Dispatch]] → updates → [[pmm-save/SKILL.md]]
+[[Concurrent Pre-check]] → part-of → [[Concurrent Sub-agent Dispatch]]
+[[Concurrent Pre-check]] → single-read-only-agent → [[Template Status Check]]
+[[v1.3.3]] → contains → [[Concurrent Sub-agent Dispatch]]
+[[GitHub Account Lesson]] → pattern → [[PR #24, #26 under raffi-ismail]] <!-- 4th recurrence of account mix-up -->

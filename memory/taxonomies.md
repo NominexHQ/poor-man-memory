@@ -154,3 +154,13 @@ Track changes — note when a taxonomy evolves so historical references remain i
 |---|---|---|---|---|
 | Raffi (raffi-ismail) | raffi-ismail@users.noreply.github.com | Admin, reviewer, creator | PR review, merges, admin operations | All (private and public) |
 | Leith (leith-dev) | leith-dev@users.noreply.github.com | Public-facing author | Feature commits, PRs | NominexHQ repos |
+
+### Phase 3 Maintain Dispatch Patterns
+*Purpose: concurrency strategies for Phase 3 memory maintenance*
+*Last updated: 2026-03-18*
+
+| Pattern | Trigger | Execution Model | Use Case |
+|---|---|---|---|
+| Tier-based Dispatch | Standard Phase 3 maintenance | Tier 1+2 parallel, Tier 3 sequential after | Multi-file updates requiring safe ordering |
+| Concurrent Pre-check | Before Tier-based Dispatch | Single read-only agent | Check all files for template-only status before dispatch |
+| Sequential Fallback | Large or sensitive updates | Linear agent execution | When parallelism overhead exceeds benefit |

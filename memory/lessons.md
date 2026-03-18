@@ -59,3 +59,7 @@ What to do instead: Add pre-PR checklist step that verifies GitHub CLI is authen
 **2026-03-18 — Settings merge category blocks /pmm-update auto-apply** [agent:leith]
 What happened: `.claude/settings.json` in version.json has category `merge` (manual merge required), so /pmm-update will NOT auto-apply the Bash wildcard fix to existing user installs. Users must update manually or re-run /pmm-update with confirmation.
 What to do instead: Consider whether critical security/stability fixes should be in an auto-apply category. For settings.json changes, retain merge category (risky to auto-merge) but document fix prominently in release notes and send targeted notification to users (future: add notification framework to /pmm-update).
+
+**2026-03-18 — GitHub account mix-up repeated twice in same session (4th overall, PRs #24 and #26)** [agent:leith]
+What happened: PRs #24 and #26 were both created under raffi-ismail instead of leith-dev, in the same session. Root cause: `gh pr merge` switches the active gh account to raffi-ismail; the subsequent `gh pr create` inherits that account. The pattern repeats because the account switch happens mid-pipeline without a reset to leith-dev afterward.
+What to do instead: Always run `gh auth switch --user leith-dev` immediately before any `gh pr create` call, as an explicit step — not relying on prior state. The active account must be verified, not assumed. Consider making this a mandatory pre-step in the PR workflow documented in standinginstructions.md.

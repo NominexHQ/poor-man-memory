@@ -67,3 +67,6 @@ Append-only — entries go in chronological order.
 **2026-03-18** — PR #21 created under wrong GitHub account (raffi-ismail); closed and recreated as PR #22 under leith-dev account. Approved and merged by raffi-ismail (second repeat of PR #12 account mix-up). [agent:leith]
 **2026-03-18** — poor-man-memory-repo local clone pulled to latest: 8ed9425 → e0b35b5 (33 commits behind after merges resolved). [system:process]
 **2026-03-18** — Version bumped to v1.3.2 in pmm/version.json; PR #23 created, reviewed, and merged; v1.3.2 GitHub release published. [system:process]
+**2026-03-18** — User proposed tier-based concurrent sub-agents for Phase 3 Maintain; design adopted: Tier 1+2 parallel, Tier 3 after; pre-check moved to single concurrent read-only agent. [user:raffi]
+**2026-03-18** — SKILL.md Phase 3 and pmm-save/SKILL.md updated with tier-based dispatch; decision recorded in decisions.md; PR #25 merged (leith-dev/raffi-ismail). [agent:leith]
+**2026-03-18** — Version bumped 1.3.2 → 1.3.3; PR #27 merged (leith-dev/raffi-ismail); v1.3.3 released at https://github.com/NominexHQ/poor-man-memory/releases/tag/v1.3.3. [system:process]
