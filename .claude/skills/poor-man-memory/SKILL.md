@@ -211,7 +211,7 @@ Replace `<skill-base>` with the actual skill base directory path.
 - **Tier 2 — Content files** (semantic, loosely coupled): `decisions.md`, `lessons.md`, `preferences.md`, `memory.md`, `processes.md`, `voices.md`, `assets.md`, `standinginstructions.md`
 - **Tier 3 — Relational files** (depend on Tier 1+2 updated state): `graph.md`, `vectors.md`, `taxonomies.md`
 
-Launch the Tier 1 and Tier 2 agents **simultaneously** (use `run_in_background: true` for one of them). After both return, launch the Tier 3 agent — it reads the file state already written by Tier 1+2 agents before updating relational structure.
+Launch the Tier 1 and Tier 2 agents **simultaneously** by dispatching both as separate Agent tool calls in the **same message** (not `run_in_background` — background agents do not inherit Edit/Write tool permissions). After both return, launch the Tier 3 agent — it reads the file state already written by Tier 1+2 agents before updating relational structure.
 
 Each agent uses the model from `config.md` (default: `haiku`). Use the following prompt for each tier, substituting `<tier-file-list>`:
 
