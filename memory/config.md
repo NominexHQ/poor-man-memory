@@ -16,6 +16,14 @@ Run `/pmm-settings` at any time to change these.
 - Mode: auto-commit
 <!-- Options: auto-commit | session-end | manual -->
 
+## Push Behaviour
+
+<!-- Should memory commits be automatically pushed to the remote? -->
+- Auto-push: off
+<!-- Options: off (default) | on -->
+<!-- off: commits stay local — push manually when ready -->
+<!-- on: git push runs after every memory commit (failures are reported, not swallowed) -->
+
 ## Sliding Window Size
 
 <!-- Max entries in windowed files (timeline, summaries) before trimming -->
@@ -28,6 +36,14 @@ Run `/pmm-settings` at any time to change these.
 <!-- How memory updates are communicated -->
 - Mode: silent
 <!-- Options: silent | summary | verbose -->
+
+## Repository Visibility
+
+<!-- Is this repository public or private? Controls PII handling in memory files. -->
+- Visibility: public
+<!-- Options: public | private -->
+<!-- public: maintain agent avoids personal emails, uses handles over full names, summarises sensitive decisions -->
+<!-- private: no PII restrictions, full fidelity -->
 
 ## Maintain Agent Model
 
@@ -62,3 +78,7 @@ Run `/pmm-settings` at any time to change these.
 <!-- These are local-only — gitignored and excluded from all memory operations -->
 - secrets.md: protected
 <!-- secrets.md stores API keys, tokens, and credentials — gitignored, machine-local -->
+- secrets_git: never
+<!-- secrets_git options: never (default) | allow-with-warning -->
+<!-- never: pre-commit hook blocks any commit containing memory/secrets.md -->
+<!-- allow-with-warning: hook warns but does not block (irreversible if pushed to public repo) -->

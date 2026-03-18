@@ -106,14 +106,20 @@ Ask these questions (use interactive question tool with options):
 - Summary (default) — one-line confirmation after updates
 - Verbose — full detail of what changed
 
-**Q5: Maintain agent model** — Which model should handle memory updates?
+**Q5: Repository visibility** — Is this repository public or private?
+- Public (default) — memory files will be committed to a public remote. The maintain agent will avoid writing personal email addresses, prefer handles over full names, and summarise sensitive decisions without verbatim internal detail.
+- Private — no PII restrictions, full fidelity in all files.
+
+*Explain: Memory files accumulate names, behavioral profiles, internal decisions, and business context over time. This setting instructs the maintain agent accordingly. Note: this is an LLM-enforced guideline — the pre-commit hook provides code-level enforcement for secrets.md and scans for leaked patterns.*
+
+**Q6: Maintain agent model** — Which model should handle memory updates?
 - Haiku (default) — fastest and cheapest, good for mechanical file edits
 - Sonnet — balanced, better at nuanced updates
 - Opus — most capable, highest cost
 
 *Explain: The maintain agent does structured file edits — reading files, appending entries, replacing sections. Haiku handles this well and costs ~10x less than Opus. Session-start and recall agents always use your current model for higher fidelity.*
 
-**Q6: Active files** — Which memory files do you want? All are active by default. Deselect any you don't need.
+**Q7: Active files** — Which memory files do you want? All are active by default. Deselect any you don't need.
 - [multi-select] memory.md, assets.md, decisions.md, processes.md, preferences.md, voices.md, lessons.md, timeline.md, summaries.md, progress.md, last.md, graph.md, vectors.md, taxonomies.md, standinginstructions.md
 
 *Explain: Deactivated files won't be created and won't appear in BOOTSTRAP.md. You can activate them later with `/pmm-settings`. Core files (config.md, BOOTSTRAP.md) are always active.*
@@ -137,10 +143,14 @@ Replace `<skill-base>` with the actual skill base directory path.
 
 **Step 4 — Git and guidance:**
 1. Initialise a git repo if not already initialised
-2. `git add memory/ && git commit -m "memory: initialise structured memory system"`
-3. Tell the user the memory system is initialised
-4. Inform them about pre-approving git commands (see "Reducing Permission Friction" above)
-5. Mention: *"Run `/pmm-settings` at any time to change how your memory system behaves."*
+2. Install the PMM pre-commit hook:
+   ```bash
+   cp pmm/hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+   ```
+3. `git add memory/ && git reset HEAD memory/secrets.md 2>/dev/null; git commit -m "memory: initialise structured memory system"`
+4. Tell the user the memory system is initialised
+5. Inform them about pre-approving git commands (see "Reducing Permission Friction" above)
+6. Mention: *"Run `/pmm-settings` at any time to change how your memory system behaves."*
 
 ### Phase 2 — Session Start
 
@@ -205,6 +215,10 @@ Replace `<skill-base>` with the actual skill base directory path.
 > - **Window size** — use the configured max entries for timeline.md and summaries.md
 > - **Active files** — only update files that are active. Skip deactivated files.
 > - **Protected files** — never read, write, or reference `secrets.md`. It contains sensitive values. If you encounter a secret value in the conversation context, do NOT write it to any memory file.
+> - **PII handling** — check `config.md` for `Visibility`:
+>   - `public`: never write personal email addresses or phone numbers. Use handles or first names only (not full legal names). For decisions, write the conclusion and rationale summary — omit verbatim quotes of sensitive internal discussions.
+>   - `private`: no PII restrictions, full fidelity.
+>   - In either case: never write API keys, tokens, passwords, or credentials to any memory file (secrets.md only).
 > - Do NOT modify config.md itself.
 >
 > **What changed:**
@@ -258,10 +272,17 @@ Replace `<skill-base>` with the actual skill base directory path.
 
 Replace `<project-root>`, `<skill-base>`, and the "What changed" block with actual values.
 
-**After agent returns:** Main context commits:
+**After agent returns:** Main context commits. Read `memory/config.md` for the `Auto-push` setting:
+
 ```bash
-git add memory/ && git commit -m "memory: <brief description>" && git push origin main 2>/dev/null || true
+# Always:
+git add memory/ && git reset HEAD memory/secrets.md 2>/dev/null; git commit -m "memory: <brief description>"
+
+# Only if Auto-push is "on" in config.md:
+git push origin main || echo "⚠️  Push failed — changes committed locally but not pushed"
 ```
+
+Note: memory commits go directly to main (not via PR) — this is an intentional exception to the project's PR workflow, as automated memory saves cannot wait for review.
 
 ### Phase 4 — Recall
 

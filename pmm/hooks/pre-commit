@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# PMM pre-commit hook
+# Blocks commits containing memory/secrets.md and scans staged memory files for sensitive patterns.
+# Installed by PMM at: .git/hooks/pre-commit
+# Source: pmm/hooks/pre-commit
+
+set -euo pipefail
+
+ERRORS=0
+
+# ── 1. Block memory/secrets.md ──────────────────────────────────────────────
+
+if git diff --cached --name-only | grep -q "^memory/secrets\.md$"; then
+  # Check config for secrets_git setting
+  SECRETS_GIT="never"
+  if [ -f "memory/config.md" ]; then
+    SECRETS_GIT=$(grep -oP '(?<=secrets_git: ).*' memory/config.md | head -1 | tr -d '[:space:]' || echo "never")
+  fi
+
+  if [ "$SECRETS_GIT" = "allow-with-warning" ]; then
+    echo "⚠️  WARNING: memory/secrets.md is staged for commit."
+    echo "   This file may contain API keys and credentials."
+    echo "   If this repo is public, these values will be permanently exposed in git history."
+    echo "   Proceeding because secrets_git is set to allow-with-warning in memory/config.md."
+  else
+    echo "❌ BLOCKED: memory/secrets.md is staged for commit."
+    echo "   This file contains sensitive values and must never be committed to git."
+    echo "   Run: git reset HEAD memory/secrets.md"
+    echo "   To override (not recommended): set 'secrets_git: allow-with-warning' in memory/config.md"
+    ERRORS=$((ERRORS + 1))
+  fi
+fi
+
+# ── 2. Scan staged memory/*.md files for sensitive patterns ─────────────────
+
+STAGED_MEMORY=$(git diff --cached --name-only | grep "^memory/.*\.md$" | grep -v "^memory/secrets\.md$" || true)
+
+if [ -n "$STAGED_MEMORY" ]; then
+  while IFS= read -r file; do
+    # Get staged content (not working tree content)
+    CONTENT=$(git show ":$file" 2>/dev/null || true)
+
+    # Email addresses — exclude GitHub noreply addresses
+    EMAIL_HITS=$(echo "$CONTENT" | grep -n "[a-zA-Z0-9._%+\-]\+@[a-zA-Z0-9.\-]\+\.[a-zA-Z]\{2,\}" | grep -v "users\.noreply\.github\.com" | grep -v "\[redacted" || true)
+    if [ -n "$EMAIL_HITS" ]; then
+      echo "⚠️  Possible personal email address in staged $file:"
+      echo "$EMAIL_HITS" | sed 's/^/   /'
+      ERRORS=$((ERRORS + 1))
+    fi
+
+    # Common secret patterns
+    SECRET_HITS=$(echo "$CONTENT" | grep -n -E "(^|[[:space:]])(sk-[a-zA-Z0-9]{20,}|ghp_[a-zA-Z0-9]{36,}|gho_[a-zA-Z0-9]{36,}|ghs_[a-zA-Z0-9]{36,}|AKIA[A-Z0-9]{16}|Bearer [a-zA-Z0-9._\-]{20,})" || true)
+    if [ -n "$SECRET_HITS" ]; then
+      echo "⚠️  Possible secret/token in staged $file:"
+      echo "$SECRET_HITS" | sed 's/^/   /'
+      ERRORS=$((ERRORS + 1))
+    fi
+
+  done <<< "$STAGED_MEMORY"
+fi
+
+# ── 3. Exit ──────────────────────────────────────────────────────────────────
+
+if [ "$ERRORS" -gt 0 ]; then
+  echo ""
+  echo "Commit blocked. Fix the above issues, then re-stage and commit."
+  echo "To skip this check (not recommended): git commit --no-verify"
+  exit 1
+fi
+
+exit 0

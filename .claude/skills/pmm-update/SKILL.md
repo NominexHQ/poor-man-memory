@@ -128,19 +128,24 @@ If user approves, dispatch a `general-purpose` agent:
 
 1. **Check for new memory file types**: Compare upstream `references/templates.md` to local. If new templates exist and user has `memory/` directory, create new files and trigger Phase 5 (Hydrate) per main skill.
 
-2. **Commit**:
+2. **Reinstall the pre-commit hook** (in case `pmm/hooks/pre-commit` was updated):
+   ```bash
+   cp pmm/hooks/pre-commit .git/hooks/pre-commit && chmod +x .git/hooks/pre-commit
+   ```
+
+3. **Commit**:
    ```bash
    git add .claude/skills/ pmm/ CLAUDE.md README.md .gitignore .claude/settings.json
    git commit -m "pmm: update to v{new_version}"
    ```
 
-3. **Clean up**:
+4. **Clean up**:
    ```bash
    rm -rf {temp_dir}
    rm -f pmm/viz-cache.html
    ```
 
-4. **Report** summary of what changed.
+5. **Report** summary of what changed.
 
 ## Notes
 
