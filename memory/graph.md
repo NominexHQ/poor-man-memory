@@ -7,6 +7,8 @@ Rendered as a visual graph in Obsidian. Traversable by Claude as structured cont
 ## Format
 
 [[Node A]] → relationship → [[Node B]]
+[[Node A]] → relationship → [[Node B]] <!-- [namespace:name] -->
+<!-- attribution comment is optional — use when provenance of an edge matters -->
 
 Use typed relationships from references/graph-syntax.md.
 

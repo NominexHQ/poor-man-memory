@@ -5,7 +5,8 @@ Each entry is ratified and should be treated as ground truth unless explicitly r
 
 ## Format
 
-**[Date] — [Decision]**
+**[Date] — [Decision]** [namespace:name?]
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 Context: why this was decided
 Ratified by: [user / consensus / default]
 

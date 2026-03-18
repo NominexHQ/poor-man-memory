@@ -222,7 +222,8 @@ Each entry is ratified and should be treated as ground truth unless explicitly r
 
 ## Format
 
-**[Date] — [Decision]**
+**[Date] — [Decision]** [namespace:name?]
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 Context: why this was decided
 Ratified by: [user / consensus / default]
 
@@ -323,8 +324,9 @@ Reference before making decisions in areas where past mistakes occurred.
 
 ## Format
 
-**[Date] — [Lesson]**
-What happened: 
+**[Date] — [Lesson]** [namespace:name?]
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
+What happened:
 What to do instead:
 
 ---
@@ -344,7 +346,8 @@ Sliding window — keep only the 20 most recent entries. Older entries live in g
 
 ## Format
 
-**[Date]** — [What happened]
+**[Date]** — [What happened] [namespace:name?]
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 
 ---
 
@@ -411,6 +414,8 @@ Updated whenever state changes meaningfully.
 
 The last few significant actions in detail.
 Always replaced — this is a window, not a log.
+<!-- Entry format: **[Date]** — [Action] [namespace:name?] -->
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 
 <!-- What happened most recently, in enough detail to pick up immediately -->
 ```
@@ -429,6 +434,8 @@ Rendered as a visual graph in Obsidian. Traversable by Claude as structured cont
 ## Format
 
 [[Node A]] → relationship → [[Node B]]
+[[Node A]] → relationship → [[Node B]] <!-- [namespace:name] -->
+<!-- attribution comment is optional — use when provenance of an edge matters -->
 
 Use typed relationships from references/graph-syntax.md.
 
@@ -476,7 +483,8 @@ These take precedence over session-level instructions when there is a conflict.
 
 ## Format
 
-**[Date added] — [Instruction]**
+**[Date added] — [Instruction]** [namespace:name?]
+<!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 Scope: [always / for X context only]
 Reason: [why this was added]
 
