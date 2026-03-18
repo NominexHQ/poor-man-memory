@@ -92,6 +92,14 @@ Ratified by: consensus
 Context: When deep mode specified in /pmm-query, agent: (a) finds vector cluster membership + similarity pairs ≥0.6 from vectors.md, (b) traverses one-hop edges from graph.md, (c) broadens via taxonomy siblings from taxonomies.md. Results tagged with provenance [via vectors], [via graph], [via taxonomy]. Enables multi-file cross-reference discovery.
 Ratified by: consensus
 
+**2026-03-18 — /pmm-settings now triggers immediate Phase 5 Hydrate on file activation**
+Context: Previously, when a deactivated file was re-activated via /pmm-settings, it would remain empty until the next memory save cycle. Closing this gap: activation now dispatches Phase 5 immediately, populating the file from existing context before returning to the user.
+Ratified by: consensus
+
+**2026-03-18 — /pmm-hydrate no-args shows usage hint, not default action**
+Context: /pmm-hydrate is a multi-mode skill supporting: (1) no args → show usage hint and available modes; (2) all → hydrate all template-only files; (3) <file> → target one file; (4) force → re-synthesize even if already populated. Default behavior is informational, not destructive. Users must opt-in explicitly.
+Ratified by: consensus
+
 **2026-03-16 — Use agents (subprocesses) for all memory operations**
 Context: Main context window was getting polluted with file I/O and git ops during memory phases. Dispatching agents keeps the main window clean — agents do the heavy lifting and return concise results.
 Ratified by: user

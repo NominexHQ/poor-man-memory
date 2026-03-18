@@ -55,9 +55,16 @@ v1.0.0 released on GitHub. Repository is live at https://github.com/NominexHQ/po
 - Feedback captured: enforce branch → PR → merge workflow, never push directly to main
 - Designed and implemented /pmm-query skill for explicit recall with prose output, filtering, and deep traversal
 - Updated SKILL.md and README.md with /pmm-query documentation and examples
+- /pmm-hydrate skill created with multi-mode support (no-args hint, all, <file>, force)
+- /pmm-settings patched to dispatch Phase 5 immediately on file activation
+
+## In Progress
+
+- Create PR for /pmm-hydrate and related doc updates
 
 ## Next
 
+- Merge /pmm-hydrate PR to main
 - Implement secrets.md feature with gitignore and maintain agent access control
 - Further dog-fooding across real projects with /pmm-query
 - Community feedback on v1.0 and v1.1 (pmm-query)
