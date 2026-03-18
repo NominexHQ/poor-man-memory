@@ -119,3 +119,7 @@ Ratified by: consensus
 **2026-03-18 — Retain settings.json in merge category for /pmm-update (not auto-apply)** [agent:leith]
 Context: Bash wildcard fix is in .claude/settings.json, which has category `merge` in version.json. This prevents /pmm-update from auto-applying it to existing installs (risky to auto-merge settings files). Fix will require manual update or user confirmation during /pmm-update. Trade-off accepted: safety (no surprise setting changes) over convenience (auto-apply fix).
 Ratified by: consensus
+
+**2026-03-18 — Tier-based concurrent sub-agents for Phase 3 Maintain** [user:raffi]
+Context: Single maintain agent handling all 15 files sequentially is slow. Replacing with a three-tier concurrent dispatch: Tier 1 (event files: last.md, timeline.md, summaries.md, progress.md) and Tier 2 (content files: decisions.md, lessons.md, preferences.md, memory.md, processes.md, voices.md, assets.md, standinginstructions.md) run in parallel. Tier 3 (relational files: graph.md, vectors.md, taxonomies.md) runs after both complete, reading updated file state from Tier 1+2. Template-only pre-check also moved to a single concurrent read-only agent rather than sequential per-file checks.
+Ratified by: user
