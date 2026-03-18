@@ -234,3 +234,15 @@ Use typed relationships from references/graph-syntax.md.
 [[Batch Hydration Mode]] → uses → [[1 agent for multiple targets]]
 [[Batch Hydration Mode]] → consolidates → [[File I/O]] <!-- reads all populated files once -->
 [[PR #28]] → ships → [[v1.4.0]]
+
+## v1.7.1 Hook Blocking Correction & Session-Exit Trigger
+[[v1.7.1]] → corrects → [[v1.7.0]] <!-- false hook-blocking assumptions -->
+[[PreCompact hook]] → discovered-to-be → [[non-blocking]] <!-- exit code 2 doesn't gate compact -->
+[[SessionEnd hook]] → discovered-to-be → [[non-blocking]] <!-- doesn't gate session exit -->
+[[PreCompact hook]] → part-of → [[Claude Code API]]
+[[SessionEnd hook]] → part-of → [[Claude Code API]]
+[[session-exit trigger]] → added-to → [[BOOTSTRAP.md]]
+[[session-exit trigger]] → added-to → [[SKILL.md When-to-Update]]
+[[session-exit trigger]] → added-to → [[templates.md]]
+[[session-exit trigger]] → part-of → [[Explicit Save Triggers]]
+[[PR #32]] → ships → [[v1.7.1]]
