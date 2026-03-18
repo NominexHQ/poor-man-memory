@@ -83,3 +83,5 @@ Append-only — entries go in chronological order.
 **2026-03-19** — PR #30 reviewed by raffi-ismail: "Context-first pattern is well-executed. Both Phase 4 and /pmm-query correctly gate on session_start: lazy AND bootstrap_wired: true together — no risk of false positives if one condition is unset. The beyond-window gate is consistent across both paths and the 'don't ask me again' persistence to config is the right UX. Eager fallback is untouched. recall_beyond_window defaults to prompt which is the safe choice for new adopters. LGTM — merging." Merged to main. [user:raffi]
 **2026-03-19** — v1.6.0 GitHub release published; context-first recall optimization reduces latency and token cost for in-window queries by 50%+. [system:process]
 **2026-03-19** — v1.6.0 git tag created and pushed to GitHub; v1.6.0 GitHub release published at https://github.com/NominexHQ/poor-man-memory/releases/tag/v1.6.0 marked as latest release. [system:process]
+
+
