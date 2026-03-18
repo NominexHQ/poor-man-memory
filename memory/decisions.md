@@ -100,6 +100,10 @@ Ratified by: consensus
 Context: /pmm-hydrate is a multi-mode skill supporting: (1) no args → show usage hint and available modes; (2) all → hydrate all template-only files; (3) <file> → target one file; (4) force → re-synthesize even if already populated. Default behavior is informational, not destructive. Users must opt-in explicitly.
 Ratified by: consensus
 
+**2026-03-18 — Bootstrap Check reminder system across all PMM surfaces** [agent:leith]
+Context: Memory auto-load at session start depends on @memory/BOOTSTRAP.md being imported in CLAUDE.md. If that wiring is missing, the user's memory never loads despite PMM being initialized. Implemented reusable Bootstrap Check utility that detects missing import and prompts user with three options: (1) Fix it now (auto-wires CLAUDE.md + commits), (2) Remind me next time, (3) Never remind me (sets bootstrap_reminder: off in config). Check runs on all 6 surfaces: init memory, /pmm-save, /pmm-hydrate, /pmm-update, /pmm-status, /pmm-query. Ensures users are aware of and can easily fix this critical wiring step.
+Ratified by: consensus
+
 **2026-03-16 — Use agents (subprocesses) for all memory operations**
 Context: Main context window was getting polluted with file I/O and git ops during memory phases. Dispatching agents keeps the main window clean — agents do the heavy lifting and return concise results.
 Ratified by: user

@@ -3,7 +3,7 @@
 Current state, milestones, and what's next.
 Updated whenever state changes meaningfully.
 
-v1.0.0 released on GitHub. Repository is live at https://github.com/NominexHQ/poor-man-memory as a clone-and-go project. All 17 memory files implemented. 5 phases operational (Init, Session Start, Maintain, Recall, Hydrate). 5 skills built (poor-man-memory, pmm-settings, pmm-dump, pmm-viz, pmm-update). Interactive D3.js visualization with time slider. System stable and undergoing dog-fooding.
+v1.3.1 released on GitHub. Repository is live at https://github.com/NominexHQ/poor-man-memory as a clone-and-go project. All 17 memory files implemented. 5 phases operational (Init, Session Start, Maintain, Recall, Hydrate). 7 skills built (poor-man-memory, pmm-settings, pmm-dump, pmm-viz, pmm-update, pmm-query, pmm-hydrate). Interactive D3.js visualization with time slider. Bootstrap Check reminder system prevents memory auto-load failures. System stable and undergoing dog-fooding.
 
 ## Completed
 
@@ -57,15 +57,22 @@ v1.0.0 released on GitHub. Repository is live at https://github.com/NominexHQ/po
 - Updated SKILL.md and README.md with /pmm-query documentation and examples
 - /pmm-hydrate skill created with multi-mode support (no-args hint, all, <file>, force)
 - /pmm-settings patched to dispatch Phase 5 immediately on file activation
+- Bootstrap Check reminder system implemented across all 6 PMM surfaces (init memory, /pmm-save, /pmm-hydrate, /pmm-update, /pmm-status, /pmm-query)
+- Reusable Bootstrap Check utility added to SKILL.md: detects missing @memory/BOOTSTRAP.md in CLAUDE.md, prompts with three options (fix now, remind later, never remind)
+- BOOTSTRAP.md self-reference removed from live file and template
+- bootstrap_reminder config flag added (on/off control for prompts)
+- README.md updated with CLAUDE.md wiring requirement note
+- PR #20 merged: Bootstrap Check implementation reviewed and approved
+- v1.3.1 released to GitHub
 
 ## In Progress
 
-- Create PR for /pmm-hydrate and related doc updates
+<!-- Nothing currently in progress -->
 
 ## Next
 
-- Merge /pmm-hydrate PR to main
 - Implement secrets.md feature with gitignore and maintain agent access control
 - Further dog-fooding across real projects with /pmm-query
-- Community feedback on v1.0 and v1.1 (pmm-query)
-- Evaluate Phase 4 (Recall) vs Phase 6 (/pmm-query) interaction and user preferences
+- Community feedback on v1.3 and v1.4 (upcoming features)
+- Evaluate Phase 4 (Recall) vs /pmm-query interaction and user preferences
+- Extended use on nominex-pmm repository itself for self-referential memory iteration

@@ -126,3 +126,17 @@ Use typed relationships from references/graph-syntax.md.
 [[Deep traversal]] → expands-via → [[Vector clusters]]
 [[Deep traversal]] → expands-via → [[Graph edges]]
 [[Deep traversal]] → expands-via → [[Taxonomy siblings]]
+
+## Bootstrap Check System
+[[Bootstrap Check]] → fixes → [[Memory auto-load failure]]
+[[Bootstrap Check]] → triggers → [[User awareness prompt]]
+[[Memory auto-load failure]] → caused-by → [[Missing @memory/BOOTSTRAP.md import in CLAUDE.md]]
+[[BOOTSTRAP.md]] → enables → [[Session Start Agent auto-load]]
+[[CLAUDE.md]] → must-import → [[BOOTSTRAP.md]]
+[[bootstrap_reminder config flag]] → controls → [[Bootstrap Check prompts]]
+[[Bootstrap Check]] → integrated-in → [[Init Phase]]
+[[Bootstrap Check]] → integrated-in → [[/pmm-save]]
+[[Bootstrap Check]] → integrated-in → [[/pmm-hydrate]]
+[[Bootstrap Check]] → integrated-in → [[/pmm-update]]
+[[Bootstrap Check]] → integrated-in → [[/pmm-status]]
+[[Bootstrap Check]] → integrated-in → [[/pmm-query]]
