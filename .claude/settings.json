@@ -2,7 +2,7 @@
   "permissions": {
     "allow": [
       "Bash(git add memory/*)",
-      "Bash(git commit -m 'memory:*')",
+      "Bash(git commit -m *)",
       "Bash(git push origin main*)",
       "Bash(git rev-parse *)",
       "Bash(git log *)",
