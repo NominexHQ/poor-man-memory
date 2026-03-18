@@ -60,3 +60,6 @@ Append-only — entries go in chronological order.
 **2026-03-18** — README.md updated: "Adding to an Existing Project" step 3 now includes note about wiring @memory/BOOTSTRAP.md into CLAUDE.md [agent:leith]
 **2026-03-18** — PR #20 created by leith-dev: Bootstrap Check implementation, approved and merged by raffi-ismail [user:raffi]
 **2026-03-18** — v1.3.1 GitHub release published at https://github.com/NominexHQ/poor-man-memory/releases/tag/v1.3.1 [system:process]
+**2026-03-18** — User chose "Fix it now" at Bootstrap Check prompt after /pmm-save [user:raffi]
+**2026-03-18** — BOOTSTRAP.md wired into CLAUDE.md under `## Memory` section; committed: "pmm: wire BOOTSTRAP.md into CLAUDE.md for auto-load" [system:process]
+**2026-03-18** — Memory auto-load now active for nominex-pmm project; subsequent session starts will auto-recall @memory/BOOTSTRAP.md [system:process]
