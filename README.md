@@ -56,11 +56,13 @@ If you already have a project and just want to drop in the memory system:
    CLAUDE.md                          # Bootstrap instructions for Claude
    ```
 
-2. **(Optional)** Merge the pre-approved git permissions into your existing `.claude/settings.json`:
+2. **(Optional)** Merge the pre-approved permissions into your existing `.claude/settings.json`:
    ```json
    {
      "permissions": {
        "allow": [
+         "Edit(memory/*)",
+         "Write(memory/*)",
          "Bash(git add memory/*)",
          "Bash(git commit -m 'memory:*')",
          "Bash(git push origin main*)"
@@ -68,15 +70,38 @@ If you already have a project and just want to drop in the memory system:
      }
    }
    ```
-   Skip this if you prefer to approve git commands manually, or if you already have a `settings.json` you don't want to modify.
+   `Edit`/`Write` permissions prevent prompts during memory saves. Skip this if you prefer to approve operations manually.
 
-3. If you already have a `CLAUDE.md`, append the contents rather than overwriting — or just add:
+3. If you already have a `CLAUDE.md`, append the contents rather than overwriting — or just add the `## Memory` section:
    ```markdown
-   ## Memory System
-   This project uses Poor Man's Memory. Run `init memory` if the `memory/` directory doesn't exist.
-   Run `/pmm-settings` to configure.
+   ## Memory
+
+   @memory/BOOTSTRAP.md
+
+   ### Tier 1 — always loaded
+
+   Claude Code only resolves first-level @-imports. These files are imported here so
+   they're guaranteed in context at session start and after /compact.
+
+   @memory/config.md
+   @memory/standinginstructions.md
+   @memory/last.md
+   @memory/progress.md
+   @memory/decisions.md
+   @memory/lessons.md
+   @memory/preferences.md
+   @memory/memory.md
+   @memory/summaries.md
+   @memory/voices.md
+   @memory/processes.md
+   @memory/timeline.md
+
+   ### Tier 2 — on demand
+
+   Remaining memory files (graph, vectors, taxonomies, assets) live on disk.
+   Load via a haiku agent when needed — see BOOTSTRAP.md for trigger conditions.
    ```
-   Then ensure your `CLAUDE.md` contains `@memory/BOOTSTRAP.md` (after running `init memory`). Without this line, memory files are not automatically loaded into Claude's context at session start — memory recall will be empty each session. PMM will prompt you to add this after init and each save.
+   The Tier 1 `@`-imports are required — without them, memory files are not loaded into Claude's context after session start or `/compact`. PMM will auto-wire this block for you via the Bootstrap Check after `init memory`.
 
 4. Open the project with Claude Code and say `init memory`.
 
@@ -84,24 +109,27 @@ The `memory/` directory will be created inside your project. Add it to version c
 
 ## Memory Files
 
-| File | Purpose | Mutability |
-|---|---|---|
-| `config.md` | PMM settings | Living |
-| `BOOTSTRAP.md` | Load instructions | Immutable |
-| `memory.md` | Long-term project facts | Living |
-| `assets.md` | People, tools, systems | Living |
-| `decisions.md` | Committed decisions | Append-only |
-| `processes.md` | Workflows | Living |
-| `preferences.md` | User working style | Living |
-| `lessons.md` | Mistakes and fixes | Append-only |
-| `timeline.md` | Recent events | Sliding window |
-| `summaries.md` | Periodic rollups | Sliding window |
-| `progress.md` | Current state | Living |
-| `last.md` | Last session detail | Always replaced |
-| `graph.md` | Typed relationships | Append-only |
-| `vectors.md` | Semantic similarities | Living (registry append-only) |
-| `taxonomies.md` | Classifications | Living |
-| `standinginstructions.md` | Persistent rules | Append-only |
+Tier 1 files are always loaded into Claude's context via direct `@`-imports in `CLAUDE.md`. Tier 2 files are loaded on demand by a haiku agent when the query needs them.
+
+| File | Purpose | Mutability | Tier |
+|---|---|---|---|
+| `config.md` | PMM settings | Living | 1 |
+| `BOOTSTRAP.md` | Load instructions | Immutable | 1 |
+| `standinginstructions.md` | Persistent rules | Append-only | 1 |
+| `last.md` | Last session detail | Always replaced | 1 |
+| `progress.md` | Current state | Living | 1 |
+| `decisions.md` | Committed decisions | Append-only | 1 |
+| `lessons.md` | Mistakes and fixes | Append-only | 1 |
+| `preferences.md` | User working style | Living | 1 |
+| `memory.md` | Long-term project facts | Living | 1 |
+| `summaries.md` | Periodic rollups | Sliding window | 1 |
+| `voices.md` | Tone profiles and reasoning lenses | Living | 1 |
+| `processes.md` | Workflows | Living | 1 |
+| `timeline.md` | Recent events | Sliding window | 1 |
+| `graph.md` | Typed relationships | Append-only | 2 |
+| `vectors.md` | Semantic similarities | Living (registry append-only) | 2 |
+| `taxonomies.md` | Classifications | Living | 2 |
+| `assets.md` | People, tools, systems | Living | 2 |
 
 ## Commands
 
