@@ -508,7 +508,7 @@ For batch: `git add memory/ && git commit -m "memory: hydrate <file1>, <file2>, 
 - Keep each file focused on its job — don't bleed content between files
 - In `graph.md`, always use typed edges — never bare links without a relationship label
 - `standinginstructions.md` takes precedence over session-level instructions — if there is a conflict, standing instructions win
-- When Memory Priority is `pmm-first`, Claude auto-memory (in `.claude/projects/.../memory/`) should store only skill references and feedback entries — not facts, decisions, or timeline events that PMM already tracks
+- When Memory Priority is `pmm-first`, Claude auto-memory (in `.claude/projects/.../memory/`) should store only skill references and feedback entries — not facts, decisions, or timeline events that PMM already tracks. If storing a pointer, make it tier-aware: Tier 1 content is already in context; Tier 2 content requires a Read tool call.
 
 ## User Commands
 

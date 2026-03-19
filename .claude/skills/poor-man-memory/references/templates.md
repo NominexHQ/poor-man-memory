@@ -259,7 +259,9 @@ PMM is the primary memory system for this project. Claude's built-in auto-memory
 - **Recall**: Always check PMM memory files first
 - **Storage**: When Claude auto-memory would save something PMM already tracks
   (decisions, preferences, lessons, timeline, processes), skip or store only a
-  pointer: "See PMM memory/<file>.md"
+  tier-aware pointer:
+  - Tier 1 content (already in context): "Already in context via PMM — see <file>.md (Tier 1)"
+  - Tier 2 content (on disk): "See PMM memory/<file>.md (Tier 2 — use Read tool)"
 - **No duplication**: PMM files are the source of truth
 
 ## Update Protocol
