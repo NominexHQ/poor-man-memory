@@ -155,3 +155,11 @@ Ratified by: user
 **2026-03-18 — Tier-based concurrent sub-agents for Phase 3 Maintain** [user:raffi]
 Context: Single maintain agent handling all 15 files sequentially is slow. Replacing with a three-tier concurrent dispatch: Tier 1 (event files: last.md, timeline.md, summaries.md, progress.md) and Tier 2 (content files: decisions.md, lessons.md, preferences.md, memory.md, processes.md, voices.md, assets.md, standinginstructions.md) run in parallel. Tier 3 (relational files: graph.md, vectors.md, taxonomies.md) runs after both complete, reading updated file state from Tier 1+2. Template-only pre-check also moved to a single concurrent read-only agent rather than sequential per-file checks.
 Ratified by: user
+
+**2026-03-19 — PreCompact and SessionEnd hooks are non-blocking; compact/exit saves rely on soft instruction only**
+Context: Investigated v1.7.0 hook-based block-signal-retry design for compact and session exit. Discovered Claude Code's PreCompact hook cannot block compaction — exit code 2 marks the hook as "failed" but compact proceeds regardless. SessionEnd hook similarly cannot block session exit. No hook mechanism in Claude Code can gate these events. Compact/exit saves rely entirely on soft instruction from BOOTSTRAP.md being honored by Claude, not on enforced blocking. False assumption corrected across documentation.
+Ratified by: user
+
+**2026-03-19 — Session-exit added as explicit save trigger**
+Context: Added "Before ending the session (user says goodbye, closes conversation, or signals they are done)" as an explicit save trigger alongside /pmm-save, /pmm-query, /pmm-hydrate, config change, and decision/new-entity triggers. Applies uniformly across BOOTSTRAP.md, SKILL.md When-to-Update guidance, and templates.
+Ratified by: user

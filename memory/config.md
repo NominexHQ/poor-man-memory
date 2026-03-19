@@ -96,6 +96,43 @@ Run `/pmm-settings` at any time to change these.
 <!-- prompt: ask before dispatching an agent to search git history -->
 <!-- auto: silently search git history when in-context files don't have the answer -->
 
+## Context Tiers
+
+<!-- Which files load into context at session start vs on demand -->
+- Mode: tiered
+<!-- Options: tiered (default) | all-in-context -->
+<!-- tiered: Tier 1 files loaded via @-imports; Tier 2 read on demand. Saves ~14k tokens. -->
+<!-- all-in-context: all active files loaded via @-imports (pre-v1.8.0 behaviour) -->
+
+### Tier 1 (always loaded)
+- config.md: tier-1
+- standinginstructions.md: tier-1
+- progress.md: tier-1
+- last.md: tier-1
+- preferences.md: tier-1
+- decisions.md: tier-1
+- lessons.md: tier-1
+- processes.md: tier-1
+- voices.md: tier-1
+
+### Tier 2 (on demand)
+- graph.md: tier-2
+- vectors.md: tier-2
+- taxonomies.md: tier-2
+- timeline.md: tier-2
+- summaries.md: tier-2
+- memory.md: tier-2
+- assets.md: tier-2
+
+## Memory Priority
+
+<!-- How PMM interacts with Claude's built-in auto-memory -->
+- Mode: pmm-first
+<!-- Options: pmm-first (default) | deduplicate | coexist -->
+<!-- pmm-first: PMM is the primary memory system; Claude auto-memory kept minimal (index/pointers only) -->
+<!-- deduplicate: actively merge overlapping content, choose best home for each piece -->
+<!-- coexist: both systems operate independently (pre-v1.8.0 behaviour) -->
+
 ## Maintain Strategy
 
 <!-- How the maintain phase dispatches agents — controls agent count per /pmm-save -->

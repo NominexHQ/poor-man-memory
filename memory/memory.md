@@ -18,6 +18,7 @@ The project being worked on IS the poor-man-memory skill itself. The user is act
 - 7 skills: poor-man-memory (main), pmm-settings (config), pmm-dump (ASCII viz), pmm-viz (interactive D3.js), pmm-update (upstream sync), pmm-query (explicit recall), pmm-hydrate (explicit hydration)
 - 4 reference files: graph-syntax.md, vector-syntax.md, voice-syntax.md, templates.md
 - Bootstrap Check utility prevents memory auto-load failures by detecting missing @memory/BOOTSTRAP.md wiring in CLAUDE.md (v1.3.1); cache flag `bootstrap_wired` eliminates file reads once wired (v1.4.0)
+- Claude Code's PreCompact and SessionEnd hooks are observational/non-blocking (v1.7.1) — compact/exit saves rely on soft instruction from BOOTSTRAP.md being honored by Claude, not enforced hooks
 - All memory operations are dispatched via agents (subprocesses), not run in main context
 - Agents edit files only — main context handles all git commits
 - config.md controls phase behaviour: save cadence, commit behaviour, window sizes, verbosity, active file list, maintain strategy (single or tiered), readonly_model (haiku default for read-only agents), session_start mode (lazy default)
@@ -31,6 +32,7 @@ The project being worked on IS the poor-man-memory skill itself. The user is act
 - Phase 5 Hydrate uses batch dispatch: single-file mode (1 agent per target) and batch mode (1 agent for multiple targets, consolidates I/O)
 - Template-only file detection moved from dedicated agent to main context Read calls (v1.4.0 optimization)
 - Early-exit bug fix in pmm-save removed false-negatives when memory not loaded at session start; now always dispatches agent (no-op haiku dispatch when no changes, ~$0.006 cost)
+- Explicit save triggers: /pmm-save command, /pmm-query executed, /pmm-hydrate executed, config change via /pmm-settings, new decision/entity/process established, before ending the session (v1.7.1)
 
 ## Token Economics
 

@@ -94,6 +94,10 @@ v1.4.0 released on GitHub with token/message overhead reduction. Repository is l
 - templates.md updated with new Recall Beyond Window section in config template (v1.6.0)
 - pmm/version.json bumped 1.5.0 → 1.6.0 (v1.6.0)
 - v1.6.0 Context-First Recall released (2026-03-19)
+- Investigation: PreCompact and SessionEnd hooks discovered to be non-blocking in Claude Code; false "blocks compact" claims corrected across documentation (v1.7.1)
+- Doc fix: Removed vestigial marker code (touch /tmp/pmm-compact-ready*) from pmm-save step 5b and Phase 3 post-commit block (v1.7.1)
+- New explicit save trigger: "Before ending the session" (user says goodbye/closes conversation) added to BOOTSTRAP.md, SKILL.md, and templates (v1.7.1)
+- v1.7.1 released to GitHub with documentation corrections and new session-exit trigger, PR #32 merged (2026-03-19)
 
 ## Next
 

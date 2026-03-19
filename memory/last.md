@@ -5,8 +5,10 @@ Always replaced — this is a window, not a log.
 <!-- Entry format: **[Date]** — [Action] [namespace:name?] -->
 <!-- attribution: [user:name], [agent:name], or [system:process] — who originated this. Optional. -->
 
-**2026-03-19** — Memory files updated with v1.6.0 context-first recall release: decisions.md appended with Phase 4/pmm-query context-first pattern ratification; summaries.md updated with expanded v1.6.0 summary including recall_beyond_window gate design and GitHub release URL; timeline.md finalized with release dates. All active files reviewed and scoped; no changes to progress.md, last.md, graph.md, vectors.md, standinginstructions.md, preferences.md, voices.md, processes.md, assets.md, memory.md, lessons.md. [system:process]
+**2026-03-19** — Investigation: PreCompact hook is non-blocking in Claude Code — Exit code 2 marks the hook as "failed" but compact always proceeds. The v1.7.0 block-signal-retry design was based on a false assumption. SessionEnd hook also non-blocking — no hook mechanism in Claude Code can gate compact or session exit. Corrected documentation across: SKILL.md When-to-Update, pmm-settings Q14, memory/config.md comments, references/templates.md config template. Removed vestigial marker code (touch /tmp/pmm-compact-ready*) from pmm-save step 5b and Phase 3 post-commit. [system:process]
 
-**2026-03-19** — v1.6.0 git tag created and pushed to GitHub; v1.6.0 GitHub release published at https://github.com/NominexHQ/poor-man-memory/releases/tag/v1.6.0 with title "v1.6.0 — context-first recall, recall_beyond_window config", marked as latest. [system:process]
+**2026-03-19** — New explicit save trigger: "Before ending the session" (user says goodbye, closes conversation, or signals they are done). Added to BOOTSTRAP.md, SKILL.md When-to-Update, and templates.md BOOTSTRAP template. [system:process]
 
-**2026-03-19** — PR #30 (feat: v1.6.0 — context-first recall, recall_beyond_window config) reviewed by raffi-ismail: context-first pattern well-executed, Phase 4 and /pmm-query gates sound, beyond-window consistency correct, 'don't ask me again' persistence proper UX, safe defaults. PR merged to main. [user:raffi]
+**2026-03-19** — Decision ratified: PreCompact and SessionEnd hooks are non-blocking in Claude Code; compact/exit saves rely on soft instruction only (honored by Claude following BOOTSTRAP.md triggers). Session-exit added as explicit PMM save trigger. [user:raffi]
+
+**2026-03-19** — PR #32 merged by raffi-ismail; v1.7.1 released at https://github.com/NominexHQ/poor-man-memory/releases/tag/v1.7.1 with title "v1.7.1 — correct hook blocking claims, add session-exit save trigger". [system:process]

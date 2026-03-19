@@ -31,6 +31,8 @@ Read `memory/config.md` and display the current settings to the user as a summar
 > - Recall beyond window: [current]
 > - Secrets in git: [current]
 > - Pre-compact hook: [current]
+> - Context tiers: [current]
+> - Memory priority: [current]
 > - Active files: [count] of 15 active
 > - Deactivated: [list, or "none"]
 
@@ -113,13 +115,30 @@ Use `AskUserQuestion` to present the same questions from Phase 1 of the main ski
 - On (default) — PreCompact hook fires before compact (non-blocking; Claude Code does not support blocking PreCompact). Claude is responsible for saving per BOOTSTRAP.md instruction.
 - Off — suppress the pre-compact hook entirely (save still instructed via BOOTSTRAP.md soft rule)
 
+**Q15: Context tiers** — How should memory files be loaded at session start?
+- Tiered (default) — Tier 1 (9 essential files) in context via @-imports; Tier 2 (7 reference files) read on demand. Saves ~14k tokens vs all-in-context.
+- All in context — all active files loaded via @-imports (pre-v1.8.0 behaviour)
+
+*Explain: Tier 1 (config, standinginstructions, progress, last, preferences, decisions, lessons, processes, voices) covers everything needed for session orientation. Tier 2 (graph, vectors, taxonomies, timeline, summaries, memory, assets) is available on demand via the Read tool when a recall query needs it.*
+
+**Q16: Memory priority** — How should PMM interact with Claude's built-in auto-memory?
+- PMM first (default) — PMM is the primary memory system; Claude auto-memory kept minimal (skill references and feedback only)
+- Deduplicate — actively merge overlapping content between PMM and Claude auto-memory
+- Coexist — both systems operate independently (pre-v1.8.0 behaviour)
+
+*Explain: Claude Code has its own auto-memory system (in .claude/projects/.../memory/). PMM-first means PMM is the source of truth — Claude auto-memory should not duplicate facts, decisions, or timeline events that PMM already tracks.*
+
 ### Step 3 — Write updated config
 
 Update `memory/config.md` with the new values. Preserve the file format from the template.
 
-If active files changed:
-- Update `memory/BOOTSTRAP.md` to list only the active files in the load order
-- If files were deactivated, do NOT delete them — just remove them from BOOTSTRAP.md
+If active files changed OR context tier mode changed:
+- Regenerate `memory/BOOTSTRAP.md` based on current active files and context tier mode:
+  - If `Mode: tiered` (default): Tier 1 active files get `@memory/` prefix (loaded via @-imports); Tier 2 active files are listed in HTML comments only (available on demand)
+  - If `Mode: all-in-context`: all active files get `@memory/` prefix in the load order
+- Tier 1 files: config, standinginstructions, progress, last, preferences, decisions, lessons, processes, voices
+- Tier 2 files: graph, vectors, taxonomies, timeline, summaries, memory, assets
+- If files were deactivated, do NOT delete them — just remove them from the file list
 - If files were activated that don't exist yet, create them from templates
 - **For each newly activated file**, dispatch Phase 5 (Hydrate) using the prompt from `.claude/skills/poor-man-memory/SKILL.md`. This ensures activated files start with synthesized content from existing memory, not empty templates. Commit hydrated files separately: `git add memory/<file> && git commit -m "memory: hydrate <file> from existing context"`
 

@@ -113,6 +113,43 @@ Run `/pmm-settings` at any time to change these.
 <!-- prompt: ask before dispatching an agent to search git history -->
 <!-- auto: silently search git history when in-context files don't have the answer -->
 
+## Context Tiers
+
+<!-- Which files load into context at session start vs on demand -->
+- Mode: tiered
+<!-- Options: tiered (default) | all-in-context -->
+<!-- tiered: Tier 1 files loaded via @-imports; Tier 2 read on demand. Saves ~14k tokens. -->
+<!-- all-in-context: all active files loaded via @-imports (pre-v1.8.0 behaviour) -->
+
+### Tier 1 (always loaded)
+- config.md: tier-1
+- standinginstructions.md: tier-1
+- progress.md: tier-1
+- last.md: tier-1
+- preferences.md: tier-1
+- decisions.md: tier-1
+- lessons.md: tier-1
+- processes.md: tier-1
+- voices.md: tier-1
+
+### Tier 2 (on demand)
+- graph.md: tier-2
+- vectors.md: tier-2
+- taxonomies.md: tier-2
+- timeline.md: tier-2
+- summaries.md: tier-2
+- memory.md: tier-2
+- assets.md: tier-2
+
+## Memory Priority
+
+<!-- How PMM interacts with Claude's built-in auto-memory -->
+- Mode: pmm-first
+<!-- Options: pmm-first (default) | deduplicate | coexist -->
+<!-- pmm-first: PMM is the primary memory system; Claude auto-memory kept minimal (index/pointers only) -->
+<!-- deduplicate: actively merge overlapping content, choose best home for each piece -->
+<!-- coexist: both systems operate independently (pre-v1.8.0 behaviour) -->
+
 ## Pre-Compact Hook
 
 <!-- Should PMM block /compact until memory is saved? -->
@@ -166,30 +203,66 @@ Skills and agents that need a secret value will read this file by key name and u
 ```markdown
 # Claude Instructions
 
+## About
+
+PMM (Poor Man's Memory) — a lightweight, git-backed structured memory system for Claude Code.
+Stores decisions, preferences, lessons, and project history in markdown files.
+Current installation: this project. Upstream: https://github.com/NominexHQ/poor-man-memory.git
+
 ## Memory System
 
 This project uses a structured memory system in the `memory/` folder.
 All memory operations run via agents (subprocesses) — never in the main context window.
 
-At session start, dispatch an agent to read all files and return a structured summary:
-
+### Tier 1 — Always Loaded
+@memory/config.md
 @memory/standinginstructions.md
 @memory/progress.md
 @memory/last.md
-@memory/graph.md
-@memory/vectors.md
-@memory/decisions.md
-@memory/taxonomies.md
-@memory/memory.md
-@memory/assets.md
 @memory/preferences.md
-@memory/voices.md
-@memory/processes.md
+@memory/decisions.md
 @memory/lessons.md
-@memory/summaries.md
-@memory/timeline.md
+@memory/processes.md
+@memory/voices.md
 
-If `memory/secrets.md` exists, note that secrets are available for this session. Do not echo or summarise its contents.
+### Tier 2 — Available On Demand
+<!-- These files are active but NOT loaded at session start.
+     Use the Read tool to load them when needed for recall or query. -->
+<!-- Available: graph.md, vectors.md, taxonomies.md, timeline.md, summaries.md,
+     memory.md, assets.md -->
+
+### Routing Table
+When a recall query or operation needs Tier 2 data, Read the relevant file(s):
+- Relationships → graph.md
+- Similarities/clusters → vectors.md
+- Categories/naming → taxonomies.md
+- History/events → timeline.md
+- Session rollups → summaries.md
+- Long-term facts → memory.md
+- People/tools/systems → assets.md
+
+If `memory/secrets.md` exists, note that secrets are available. Do not echo or summarise its contents.
+
+## Tier 2 Safeguard
+
+Before making any decision that could be informed by historical context, relationships, or
+established workflows, Read the relevant Tier 2 file(s) first. Do not rely solely on Tier 1
+context when Tier 2 files may contain pertinent information. When in doubt, Read — the cost
+of a Read tool call is negligible compared to repeating a past mistake or contradicting
+an established process.
+
+## Memory Priority
+
+PMM is the primary memory system for this project. Claude's built-in auto-memory
+(in .claude/projects/.../memory/) should be kept minimal:
+
+- **Recall**: Always check PMM memory files first
+- **Storage**: When Claude auto-memory would save something PMM already tracks
+  (decisions, preferences, lessons, timeline, processes), skip or store only a
+  tier-aware pointer:
+  - Tier 1 content (already in context): "Already in context via PMM — see <file>.md (Tier 1)"
+  - Tier 2 content (on disk): "See PMM memory/<file>.md (Tier 2 — use Read tool)"
+- **No duplication**: PMM files are the source of truth
 
 ## Update Protocol
 
@@ -220,6 +293,7 @@ git add memory/ && git reset HEAD memory/secrets.md 2>/dev/null; git commit -m "
 - vectors.md similarities/clusters are living; embedding registry is append-only
 - standinginstructions.md takes precedence over session-level instructions
 - Keep each file focused on its specific job
+- When Memory Priority is `pmm-first`, Claude auto-memory should store only skill references and feedback entries — not facts, decisions, or timeline events that PMM already tracks
 ```
 
 ---
@@ -229,7 +303,7 @@ git add memory/ && git reset HEAD memory/secrets.md 2>/dev/null; git commit -m "
 ```markdown
 # Memory
 
-Long-term facts about this project and context.
+Long-term facts about the user's project — the codebase PMM is installed into. Not about PMM itself (see BOOTSTRAP.md).
 Updated when new durable facts are established.
 
 ## Project
