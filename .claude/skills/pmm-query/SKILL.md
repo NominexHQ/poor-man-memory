@@ -27,12 +27,14 @@ Explicitly query PMM memory files with optional filtering. Runs as a subagent to
 2. **Bootstrap Check** — before querying, run the Bootstrap Check from `.claude/skills/poor-man-memory/SKILL.md` (`## Bootstrap Check` section). If the check fires (CLAUDE.md is not wired), note inline: *"Note: memory files are not auto-loaded at session start — query results reflect files on disk but Claude may not have this context in future sessions until the bootstrap wiring is set up."* Then proceed with the query regardless of what the user chooses.
 3. **Check mode:** Read `memory/config.md` for `Session Start` and `bootstrap_wired`.
 
-**If `Mode: lazy` AND `bootstrap_wired: true`** — execute the query steps below directly in main context (no agent dispatch). All memory files are already in the context window via BOOTSTRAP.md @-imports.
+**If `Mode: lazy` AND `bootstrap_wired: true`** — execute the query steps below directly in main context (no agent dispatch). Check `Context Tiers` mode in `memory/config.md`:
+- If `Mode: tiered` — Tier 1 files are in context; Tier 2 files (graph, vectors, taxonomies, timeline, summaries, memory, assets) must be Read on demand if the routing table points to them.
+- If `Mode: all-in-context` — all memory files are already in context via BOOTSTRAP.md @-imports.
 
 Run Steps 1–4 of the Agent Prompt below in main context:
 - **Step 1 — Parse Query:** extract keyword, attribution filter, date filter, file scope, deep flag, dump flag from `$ARGUMENTS`
-- **Step 2 — Route to Relevant Files:** use the routing table to identify target files; read `memory/config.md` to confirm active files
-- **Step 3 — Search:** search the in-context copies of the target files; apply attribution/date filters
+- **Step 2 — Route to Relevant Files:** use the routing table to identify target files; read `memory/config.md` to confirm active files. If any target file is Tier 2 and `Mode: tiered`, use the Read tool to load it before searching.
+- **Step 3 — Search:** search the in-context or freshly-read copies of the target files; apply attribution/date filters
 - **Step 4 — Deep Traversal** (if `deep=true`): traverse vectors.md, graph.md, taxonomies.md — all already in context
 - **Step 5 — Fallback Chain (git history):** if Steps 3+4 returned no results, apply the **beyond-window gate**:
   - Read `memory/config.md` for `## Recall Beyond Window` → `Mode`

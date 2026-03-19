@@ -125,6 +125,19 @@ Ask these questions (use interactive question tool with options):
 
 *Explain: Deactivated files won't be created and won't appear in BOOTSTRAP.md. You can activate them later with `/pmm-settings`. Core files (config.md, BOOTSTRAP.md) are always active.*
 
+**Q8: Context tiers** — How should memory files be loaded at session start?
+- Tiered (default) — Tier 1 (9 essential files) in context via @-imports; Tier 2 (7 reference files) read on demand. Saves ~14k tokens vs all-in-context.
+- All in context — all active files loaded via @-imports (pre-v1.8.0 behaviour)
+
+*Explain: Tier 1 (config, standinginstructions, progress, last, preferences, decisions, lessons, processes, voices) covers everything needed for session orientation. Tier 2 (graph, vectors, taxonomies, timeline, summaries, memory, assets) is reference/historical data — available on demand via the Read tool when a recall query needs it.*
+
+**Q9: Memory priority** — How should PMM interact with Claude's built-in auto-memory?
+- PMM first (default) — PMM is the primary memory system; Claude auto-memory kept minimal (skill references and feedback only)
+- Deduplicate — actively merge overlapping content between PMM and Claude auto-memory
+- Coexist — both systems operate independently (pre-v1.8.0 behaviour)
+
+*Explain: Claude Code has its own auto-memory system (in .claude/projects/.../memory/). PMM-first means PMM is the source of truth — Claude auto-memory should not duplicate facts, decisions, or timeline events that PMM already tracks.*
+
 **Step 2 — Write config:** Write the user's responses to `memory/config.md` using the format from `references/templates.md`.
 
 **Step 3 — Scaffold files:** Launch a `general-purpose` agent with this prompt:
@@ -160,7 +173,12 @@ Replace `<skill-base>` with the actual skill base directory path.
 
 **Dispatch:** Read `memory/config.md` for `Session Start` mode (default: `lazy`) and `bootstrap_wired` status.
 
-**If `Mode: lazy` AND `bootstrap_wired: true`** — skip agent dispatch. Memory files are already loaded into session context via the `@memory/BOOTSTRAP.md` @-imports in `CLAUDE.md`. Absorb the file contents directly from context — no agent needed. This saves ~33k tokens per session start.
+**If `Mode: lazy` AND `bootstrap_wired: true`** — skip agent dispatch. Check `memory/config.md` for `Context Tiers` mode (default: `tiered`):
+
+- If `Mode: tiered` — Tier 1 files are already in context via @-imports (config, standinginstructions, progress, last, preferences, decisions, lessons, processes, voices). Tier 2 files (graph, vectors, taxonomies, timeline, summaries, memory, assets) are on disk but not loaded — note their availability for on-demand recall using the routing table in BOOTSTRAP.md.
+- If `Mode: all-in-context` — all active files are in context via @-imports. Absorb all files directly.
+
+In both cases, no agent dispatch needed. Tiered mode saves ~14k tokens vs all-in-context; both save significantly vs eager mode.
 
 **If `Mode: eager` OR `bootstrap_wired: false`** — launch a `general-purpose` agent using the `Readonly Agent Model` from config (default: `haiku`) with this prompt:
 
@@ -315,7 +333,12 @@ After commit, **run the Bootstrap Check** (see `## Bootstrap Check` below).
 
 **Check mode first:** Read `memory/config.md` for `Session Start` and `bootstrap_wired`.
 
-**If `Mode: lazy` AND `bootstrap_wired: true`** — answer directly from in-context memory. No agent dispatch needed — all 16 memory files are already in the context window via the BOOTSTRAP.md @-imports.
+**If `Mode: lazy` AND `bootstrap_wired: true`** — check `Context Tiers` mode in `memory/config.md`:
+
+- If `Mode: tiered` — search Tier 1 files in context first (config, standinginstructions, progress, last, preferences, decisions, lessons, processes, voices). If the routing table points to a Tier 2 file, use the Read tool to load it on demand before searching (graph, vectors, taxonomies, timeline, summaries, memory, assets).
+- If `Mode: all-in-context` — all 16 active files are already in context. Search them directly without any Read calls.
+
+Answer from the loaded/in-context content. Cite the source file.
 
 **Context-first search — routing table:**
 - Decisions → decisions.md
@@ -485,6 +508,7 @@ For batch: `git add memory/ && git commit -m "memory: hydrate <file1>, <file2>, 
 - Keep each file focused on its job — don't bleed content between files
 - In `graph.md`, always use typed edges — never bare links without a relationship label
 - `standinginstructions.md` takes precedence over session-level instructions — if there is a conflict, standing instructions win
+- When Memory Priority is `pmm-first`, Claude auto-memory (in `.claude/projects/.../memory/`) should store only skill references and feedback entries — not facts, decisions, or timeline events that PMM already tracks
 
 ## User Commands
 
