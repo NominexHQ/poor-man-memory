@@ -106,7 +106,8 @@ v1.4.0 released on GitHub with token/message overhead reduction. Repository is l
 - v1.8.0 fix shipped via PR #33
 - Tiered memory loading fix implemented (v1.9.0) — root cause: @-imports don't recurse; moved Tier 1 files to CLAUDE.md direct @-imports, kept Tier 2 on-demand via haiku agent
 - CLAUDE.md, BOOTSTRAP.md, settings.json, templates.md, SKILL.md, pmm/version.json updated for v1.9.0
-- v1.9.0 bump to version.json (category: merge)
+- v1.9.0 shipped via PR #34: branch v1.9.0-tiered-loading created by leith-dev, reviewed and approved by raffi-ismail, merged (squash), branch deleted, local main synced
+- Review feedback captured: lazy session-start bug present since v1.5.0 — @-imports never recurse, assumption was never verified
 
 ## Next
 
