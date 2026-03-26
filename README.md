@@ -31,6 +31,7 @@ Gives Claude a second brain that survives between sessions. Every decision, less
 #### Official marketplace
 
 ```bash
+claude plugin marketplace add anthropics/claude-plugins-official
 claude plugin install pmm@claude-plugins-official
 ```
 
