@@ -31,7 +31,7 @@ Gives Claude a second brain that survives between sessions. Every decision, less
 #### Official marketplace
 
 ```bash
-claude plugin install pmm
+claude plugin install pmm@claude-plugins-official
 ```
 
 #### Community mirror
