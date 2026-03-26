@@ -26,7 +26,26 @@ Gives Claude a second brain that survives between sessions. Every decision, less
 
 ## Installation
 
-This is a **clone-and-go project directory** — no manual setup, no file copying, no configuration wiring. Everything Claude Code needs is already in place (`.claude/skills/`, `settings.json`, `CLAUDE.md`).
+### Option A: Install the PMM plugin (recommended)
+
+#### Official marketplace
+
+```bash
+claude plugin install pmm
+```
+
+#### Community mirror
+
+```bash
+claude plugin marketplace add anthropics/claude-plugins-community
+claude plugin install pmm@claude-community
+```
+
+Then run `pmm:init` in your project to scaffold memory.
+
+### Option B: Clone-and-go (standalone)
+
+This repo is also a **clone-and-go project directory** — no manual setup, no file copying, no configuration wiring. Everything Claude Code needs is already in place (`.claude/skills/`, `settings.json`, `CLAUDE.md`).
 
 ```bash
 git clone https://github.com/NominexHQ/poor-man-memory.git my-project
